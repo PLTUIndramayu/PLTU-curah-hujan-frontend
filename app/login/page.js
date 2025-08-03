@@ -5,22 +5,40 @@ import { useRouter } from 'next/navigation';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
 
-    const data = await res.json();
-    if (res.ok) {
-      localStorage.setItem('token', data.token);
-      router.push('/dashboard');
-    } else {
-      alert(data.message);
+    if (!email || !password) {
+      alert('Email dan password harus diisi');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin', // or 'include' if CORS is configured
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        router.push('/dashboard');
+      } else {
+        alert(data.message || 'Login gagal');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Terjadi kesalahan jaringan');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,6 +55,7 @@ export default function LoginPage() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
@@ -44,12 +63,16 @@ export default function LoginPage() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          disabled={loading}
+          className={`w-full text-white p-2 rounded ${
+            loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+          }`}
         >
-          Login
+          {loading ? 'Memproses...' : 'Login'}
         </button>
       </form>
     </div>

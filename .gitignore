@@ -14,9 +14,6 @@ yarn-error.log*
 dist/
 build/
 
-*.sqlite
-*.sqlite3
-
 # OS/Editor junk
 .DS_Store
 .idea/
