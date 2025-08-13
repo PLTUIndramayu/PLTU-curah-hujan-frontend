@@ -44,7 +44,7 @@ export default function ViewGrafik() {
   );
 }
 
-export function ViewGrafikTahunan() {
+function ViewGrafikTahunan() {
   const rows = useCurahHujanAllData();
   const [periode, setPeriode] = useState("Bulanan");
   const [bulan, setBulan] = useState(dayjs().format("MM"));
