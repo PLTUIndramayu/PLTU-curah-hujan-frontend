@@ -1,10 +1,13 @@
 "use client";
-import { TextField, Typography } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { Header } from "../component/header";
 
-export default function InputDatacurah_hujan() {
+import { Header } from "../component/header";
+import { BodyTableViewData, HeadTableViewData } from "../view-data/helper";
+import { useCurahHujanAllData } from "../api/curah-hujan";
+
+export default function InputData() {
+  const rows = useCurahHujanAllData();
   const [form, setForm] = useState({
     tanggal: "",
     jam: "",
@@ -232,12 +235,14 @@ export default function InputDatacurah_hujan() {
               </div>
 
               <div className="md:col-span-2">
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                <Button
+                  variant="contained"
+                  sx={{ mt: 3 }}
+                  fullWidth
+                  className="w-full  p-2 rounded"
                 >
                   Submit Data
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -264,99 +269,22 @@ export default function InputDatacurah_hujan() {
           <div className="bg-white p-6 rounded-xl shadow-md">
             <div className="flex justify-between mb-4">
               <h3 className="font-semibold">Data Terakhir Diinput</h3>
-              <a href="#" className="text-blue-600 text-sm hover:underline">
+              <a
+                href="/view-data"
+                className="text-blue-600 text-sm hover:underline"
+              >
                 Lihat Semua
               </a>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <Head />
-                <Body />
+                <HeadTableViewData />
+                <BodyTableViewData rows={rows} />
               </table>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-}
-
-function Head() {
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell>Tanggal</TableCell>
-        <TableCell>Jam</TableCell>
-        <TableCell>Umur HSS</TableCell>
-        <TableCell>Umur Tanaman</TableCell>
-        <TableCell>Curah Hujan</TableCell>
-        <TableCell>Sifat Hujan</TableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
-
-function Body() {
-  const [rows, setRows] = useState([]);
-  const fetchData = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/curah-hujan", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Gagal mengambil data: ${errorText}`);
-      }
-      const json = await response.json();
-      const data = json.data;
-      setRows(data);
-    } catch (error) {
-      console.error("Terjadi kesalahan saat mengambil data:", error);
-      alert("Terjadi kesalahan saat mengambil data: " + error.message);
-    }
-  };
-
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-
-  return (
-    <TableBody>
-      {Array.isArray(rows) && rows.length > 0 ? (
-        rows.map((item, index) => (
-          <TableRow key={index}>
-            <TableCell>
-              {item.tanggal
-                ? new Date(item.tanggal).toLocaleDateString("id-ID", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                : ""}
-            </TableCell>
-            <TableCell>
-              {item.jam
-                ? new Date(`1970-01-01T${item.jam}`).toLocaleTimeString("id-ID", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                : ""}
-            </TableCell>
-            <TableCell>{item.umur_hss}</TableCell>
-            <TableCell>{item.umur_tanaman}</TableCell>
-            <TableCell>{item.curah_hujan}</TableCell>
-            <TableCell>{item.sifat_hujan}</TableCell>
-          </TableRow>
-        ))
-      ) : (
-        <TableRow>
-          <TableCell colSpan={6} align="center">
-            Tidak ada data
-          </TableCell>
-        </TableRow>
-      )}
-    </TableBody>
   );
 }
