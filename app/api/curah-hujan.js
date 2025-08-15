@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export function useCurahHujanAllData() {
   const [rows, setRows] = useState([]);
 
   const fetchDataCurahHujanAllData = async () => {
     try {
-      const response = await fetch("http://localhost:3001/curah-hujan", {
+      const response = await fetch(`${API_URL}/curah-hujan`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -34,7 +36,7 @@ export function useCurahHujanByMonth(bulan, tahun) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/curah-hujan/by-month?bulan=${bulan}&tahun=${tahun}`,
+          `${API_URL}/curah-hujan/by-month?bulan=${bulan}&tahun=${tahun}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
