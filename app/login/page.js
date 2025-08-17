@@ -8,13 +8,10 @@ import {
   Typography,
   TextField,
   Button,
-  Checkbox,
-  FormControlLabel,
   Link,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -33,10 +30,10 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3001/auth/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "same-origin", // or 'include' if CORS is configured
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
@@ -74,8 +71,16 @@ export default function LoginPage() {
       </Typography>
 
       {/* Card Login */}
-      <Card sx={{ width: "100%", maxWidth: 500, boxShadow: 3, borderRadius: 3, px: 2 }}>
-        <CardContent >
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: 500,
+          boxShadow: 3,
+          borderRadius: 3,
+          px: 2,
+        }}
+      >
+        <CardContent>
           {/* Icon */}
           <Box sx={{ display: "flex", justifyContent: "center", mb: 2, mt: 4 }}>
             <LockOutlinedIcon sx={{ fontSize: 48, color: "primary.main" }} />
@@ -85,14 +90,20 @@ export default function LoginPage() {
           <Typography variant="h5" textAlign="center" fontWeight="600">
             Login
           </Typography>
-          <Typography mt={4} variant="body2" textAlign="center" color="text.secondary" mb={3}>
+          <Typography
+            mt={4}
+            variant="body2"
+            textAlign="center"
+            color="text.secondary"
+            mb={3}
+          >
             Masukkan kredensial Anda untuk mengakses sistem
           </Typography>
 
           <form onSubmit={handleSubmit}>
             {/* Username / Email */}
             <TextField
-             placeholder="Email"
+              placeholder="Email"
               variant="outlined"
               fullWidth
               size="medium"
@@ -104,7 +115,7 @@ export default function LoginPage() {
 
             {/* Password */}
             <TextField
-            placeholder="Password"
+              placeholder="Password"
               type="password"
               variant="outlined"
               fullWidth
@@ -124,7 +135,11 @@ export default function LoginPage() {
               disabled={loading}
               sx={{ mt: 2, mb: 2 }}
             >
-              {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Login"}
+              {loading ? (
+                <CircularProgress size={24} sx={{ color: "white" }} />
+              ) : (
+                "Login"
+              )}
             </Button>
 
             {/* Lupa Password */}
@@ -158,8 +173,8 @@ export default function LoginPage() {
         textAlign="center"
         sx={{ mt: 5 }}
       >
-        Dikembangkan oleh PLTU Indramayu | v1.0 <br />© 2025 Sistem Monitoring Curah
-        Hujan. Hak Cipta Dilindungi.
+        Dikembangkan oleh PLTU Indramayu | v1.0 <br />© 2025 Sistem Monitoring
+        Curah Hujan. Hak Cipta Dilindungi.
       </Typography>
     </Box>
   );
