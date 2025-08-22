@@ -1,6 +1,9 @@
-import { HelpCircle } from "lucide-react";
+import {
+  HelpCircle,
+  LogOut as LogOutIcon,
+  User as UserIcon,
+} from "lucide-react";
 import { AlertTriangle } from "lucide-react";
-
 import {
   Button,
   Dialog,
@@ -12,16 +15,18 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-import { LogOut as LogOutIcon } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function Header() {
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogLogout, setOpenDialogLogout] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const router = useRouter();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    router.push("/login");
   };
 
   const handleMenuOpen = (event) => {
@@ -40,9 +45,16 @@ export function Header() {
       </header>
 
       <div className="flex gap-2">
-        <Button variant="outlined" className="flex items-center gap-2">
-          <HelpCircle className="w-4 h-4" /> Bantuan
-        </Button>
+        <Link href="https://www.whatsapp.com" passHref>
+          <Button
+            variant="outlined"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2"
+          >
+            <HelpCircle className="w-4 h-4" /> Bantuan
+          </Button>
+        </Link>
 
         {/* Profil dengan dropdown */}
         <Button variant="outlined" onClick={handleMenuOpen}>
@@ -56,19 +68,28 @@ export function Header() {
           <MenuItem
             onClick={() => {
               handleMenuClose();
-              setOpenDialog(true);
+              router.push("/profile");
             }}
           >
-            <LogOutIcon size={18} style={{ marginRight: 8 }} /> Logout
+            <UserIcon size={18} style={{ marginRight: 8 }} />
+            Profil Saya
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              setOpenDialogLogout(true);
+            }}
+          >
+            <LogOutIcon size={18} style={{ marginRight: 8 }} />
+            Logout
           </MenuItem>
         </Menu>
       </div>
 
       {/* Dialog Logout */}
-
       <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
+        open={openDialogLogout}
+        onClose={() => setOpenDialogLogout(false)}
         PaperProps={{
           sx: { borderRadius: 3, padding: 1, minWidth: 350 },
         }}
@@ -93,7 +114,7 @@ export function Header() {
 
         <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
           <Button
-            onClick={() => setOpenDialog(false)}
+            onClick={() => setOpenDialogLogout(false)}
             variant="outlined"
             sx={{ borderRadius: 2, px: 3 }}
           >

@@ -1,13 +1,170 @@
 "use client";
 import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
-
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Header } from "../component/header";
 import { BodyTableViewData, HeadTableViewData } from "../view-data/helper";
 import { useCurahHujanAllData } from "../api/curah-hujan";
 
+export function FormInputData({ handleSubmit, form, handleChange }) {
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-md">
+      <h2 className="text-xl font-semibold mb-2">Input Data Curah Hujan</h2>
+      <p className="text-sm text-gray-600 mb-6">
+        Formulir pencatatan data harian curah hujan
+      </p>
+
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">Hari/Tanggal</label>
+          <TextField
+            type="date"
+            name="tanggal"
+            className="p-2 border rounded"
+            value={form.tanggal}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">Jam</label>
+          <TextField
+            type="time"
+            name="jam"
+            className="p-2 border rounded"
+            value={form.jam}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">
+            Umur HSS (Hari Setelah Semai)
+          </label>
+          <TextField
+            type="number"
+            name="umur_hss"
+            className="p-2 border rounded"
+            value={form.umur_hss}
+            onChange={handleChange}
+            placeholder="Masukkan umur HSS"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">
+            Umur Tanaman (Hari Setelah Tanam)
+          </label>
+          <TextField
+            type="number"
+            name="umur_tanaman"
+            className="p-2 border rounded"
+            value={form.umur_tanaman}
+            onChange={handleChange}
+            placeholder="Masukkan umur tanaman"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">Curah Hujan (mm)</label>
+          <TextField
+            type="number"
+            name="curah_hujan"
+            className="p-2 border rounded"
+            value={form.curah_hujan}
+            onChange={handleChange}
+            placeholder="Masukkan curah hujan"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">Sifat Hujan</label>
+          <TextField
+            type="text"
+            name="sifat_hujan"
+            className="p-2 border rounded bg-gray-100"
+            value={form.sifat_hujan}
+            readOnly
+            placeholder="Terisi otomatis"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">Varietas</label>
+          <TextField
+            type="text"
+            name="varietas"
+            className="p-2 border rounded"
+            value={form.varietas}
+            onChange={handleChange}
+            placeholder="Masukkan varietas"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="font-medium text-gray-700">Sumber Air</label>
+          <TextField
+            type="text"
+            name="sumber_air"
+            className="p-2 border rounded"
+            value={form.sumber_air}
+            onChange={handleChange}
+            placeholder="Masukkan sumber air"
+          />
+        </div>
+
+        <div className="md:col-span-2 flex flex-col gap-1">
+          <label className="font-medium text-gray-700">
+            OPT (Organisme Pengganggu Tanaman)
+          </label>
+          <TextField
+            type="text"
+            name="opt"
+            className="p-2 border rounded"
+            value={form.opt}
+            onChange={handleChange}
+            placeholder="Masukkan OPT"
+          />
+        </div>
+
+        <div className="md:col-span-2 flex flex-col gap-1">
+          <label className="font-medium text-gray-700">
+            Keterangan (opsional)
+          </label>
+          <TextField
+            name="keterangan"
+            className="p-2 border rounded"
+            rows="3"
+            multiline
+            value={form.keterangan}
+            onChange={handleChange}
+            placeholder="Tambahkan keterangan jika diperlukan"
+          ></TextField>
+        </div>
+
+        <div className="md:col-span-2">
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3 }}
+            fullWidth
+            className="w-full  p-2 rounded"
+          >
+            Submit Data
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 export default function InputData() {
   const rows = useCurahHujanAllData();
+  const router = useRouter();
+  
   const [form, setForm] = useState({
     tanggal: "",
     jam: "",
@@ -51,20 +208,25 @@ export default function InputData() {
       return;
     }
     try {
-      const response = await fetch("http://localhost:3001/curah-hujan", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(form),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/curah-hujan`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(form),
+        }
+      );
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Gagal mengirim data: ${errorText}`);
       }
       const data = await response.json();
       console.log("Data berhasil dikirim:", data);
+      alert("Data berhasil dikirim!");
+      router.push("/view-data");
 
       setForm({
         tanggal: "",
@@ -89,163 +251,15 @@ export default function InputData() {
     <div className="p-6 space-y-6">
       <Header />
       <div className="min-h-screen bg-gray-100">
-        <div className="max-w-4xl mx-auto p-6 space-y-10">
+        <div className="max-w-5xl mx-auto p-6 space-y-10">
           <br />
-          <div className="bg-white p-6 rounded-xl shadow-md">
-            <h2 className="text-xl font-semibold mb-2">
-              Input Data Curah Hujan
-            </h2>
-            <p className="text-sm text-gray-600 mb-6">
-              Formulir pencatatan data harian curah hujan
-            </p>
 
-            <form
-              onSubmit={handleSubmit}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">
-                  Hari/Tanggal
-                </label>
-                <TextField
-                  type="date"
-                  name="tanggal"
-                  className="p-2 border rounded"
-                  value={form.tanggal}
-                  onChange={handleChange}
-                />
-              </div>
+          <FormInputData
+            handleSubmit={handleSubmit}
+            form={form}
+            handleChange={handleChange}
+          />
 
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">Jam</label>
-                <TextField
-                  type="time"
-                  name="jam"
-                  className="p-2 border rounded"
-                  value={form.jam}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">
-                  Umur HSS (Hari Setelah Semai)
-                </label>
-                <TextField
-                  type="number"
-                  name="umur_hss"
-                  className="p-2 border rounded"
-                  value={form.umur_hss}
-                  onChange={handleChange}
-                  placeholder="Masukkan umur HSS"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">
-                  Umur Tanaman (Hari Setelah Tanam)
-                </label>
-                <TextField
-                  type="number"
-                  name="umur_tanaman"
-                  className="p-2 border rounded"
-                  value={form.umur_tanaman}
-                  onChange={handleChange}
-                  placeholder="Masukkan umur tanaman"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">
-                  Curah Hujan (mm)
-                </label>
-                <TextField
-                  type="number"
-                  name="curah_hujan"
-                  className="p-2 border rounded"
-                  value={form.curah_hujan}
-                  onChange={handleChange}
-                  placeholder="Masukkan curah hujan"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">Sifat Hujan</label>
-                <TextField
-                  type="text"
-                  name="sifat_hujan"
-                  className="p-2 border rounded bg-gray-100"
-                  value={form.sifat_hujan}
-                  readOnly
-                  placeholder="Terisi otomatis"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">Varietas</label>
-                <TextField
-                  type="text"
-                  name="varietas"
-                  className="p-2 border rounded"
-                  value={form.varietas}
-                  onChange={handleChange}
-                  placeholder="Masukkan varietas"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="font-medium text-gray-700">Sumber Air</label>
-                <TextField
-                  type="text"
-                  name="sumber_air"
-                  className="p-2 border rounded"
-                  value={form.sumber_air}
-                  onChange={handleChange}
-                  placeholder="Masukkan sumber air"
-                />
-              </div>
-
-              <div className="md:col-span-2 flex flex-col gap-1">
-                <label className="font-medium text-gray-700">
-                  OPT (Organisme Pengganggu Tanaman)
-                </label>
-                <TextField
-                  type="text"
-                  name="opt"
-                  className="p-2 border rounded"
-                  value={form.opt}
-                  onChange={handleChange}
-                  placeholder="Masukkan OPT"
-                />
-              </div>
-
-              <div className="md:col-span-2 flex flex-col gap-1">
-                <label className="font-medium text-gray-700">
-                  Keterangan (opsional)
-                </label>
-                <TextField
-                  name="keterangan"
-                  className="p-2 border rounded"
-                  rows="3"
-                  multiline
-                  value={form.keterangan}
-                  onChange={handleChange}
-                  placeholder="Tambahkan keterangan jika diperlukan"
-                ></TextField>
-              </div>
-
-              <div className="md:col-span-2">
-                <Button
-                  variant="contained"
-                  sx={{ mt: 3 }}
-                  fullWidth
-                  className="w-full  p-2 rounded"
-                >
-                  Submit Data
-                </Button>
-              </div>
-            </form>
-          </div>
           <div className="bg-white p-6 rounded-xl shadow-md">
             <h3 className="font-semibold mb-4">Informasi Sifat Hujan</h3>
             <div className="grid grid-cols-3 gap-4">

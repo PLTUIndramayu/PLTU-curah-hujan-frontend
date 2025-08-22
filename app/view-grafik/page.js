@@ -31,6 +31,7 @@ import {
 import dayjs from "dayjs";
 import { useCurahHujanAllData } from "../api/curah-hujan";
 import { Header } from "../component/header";
+import { colors } from "../utils";
 
 export default function ViewGrafik() {
   return (
@@ -206,7 +207,6 @@ function ViewChart() {
   const [periode, setPeriode] = useState("Bulanan");
   const rows = useCurahHujanAllData();
 
-  // Olah data untuk grafik garis
   const lineData = useMemo(() => {
     const grouped = {};
     rows.forEach((item) => {
@@ -224,20 +224,19 @@ function ViewChart() {
     }));
   }, [rows]);
 
-  const pieData = useMemo(() => {
-    const kategori = { ringan: 0, sedang: 0, lebat: 0 };
-    rows.forEach((item) => {
-      const nilai = parseFloat(item.curah_hujan) || 0;
-      if (nilai < 20) kategori.ringan++;
-      else if (nilai < 50) kategori.sedang++;
-      else kategori.lebat++;
-    });
-    return [
-      { name: "Hujan Ringan", value: kategori.ringan, color: "#60A5FA" },
-      { name: "Hujan Sedang", value: kategori.sedang, color: "#34D399" },
-      { name: "Hujan Lebat", value: kategori.lebat, color: "#F87171" },
-    ];
-  }, [rows]);
+  const pieData = Object.values(
+    rows.reduce((acc, cur) => {
+      if (!acc[cur.sifat_hujan]) {
+        acc[cur.sifat_hujan] = {
+          name: cur.sifat_hujan,
+          value: 0,
+          color: colors[cur.sifat_hujan] || "#A78BFA",
+        };
+      }
+      acc[cur.sifat_hujan].value += 1;
+      return acc;
+    }, {})
+  );
 
   return (
     <Box p={5}>
@@ -280,21 +279,30 @@ function ViewChart() {
             <Typography variant="subtitle1" fontWeight="bold">
               Distribusi Curah Hujan
             </Typography>
-            <PieChart width={300} height={200}>
-              <Pie
-                data={pieData}
-                dataKey="value"
-                cx="50%"
-                cy="50%"
-                outerRadius={60}
-                label
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-              <Legend />
-            </PieChart>
+            {pieData.length > 0 ? (
+              <PieChart width={300} height={200}>
+                <Pie
+                  dataKey="value"
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label={(entry) =>
+                    `${entry.name || "Tidak ada"}: ${entry.value}`
+                  }
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            ) : (
+              <Typography variant="body2" color="text.secondary">
+                Tidak ada data untuk ditampilkan
+              </Typography>
+            )}
           </CardContent>
         </Card>
       </Box>
