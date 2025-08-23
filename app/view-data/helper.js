@@ -10,7 +10,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { FormInputData } from "../input-data/page";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useGetCurahHujanById, useUpdateCurahHujan } from "../api/curah-hujan";
@@ -217,11 +217,7 @@ export function BodyTableViewData({ rows }) {
             overflowY: "auto",
           }}
         >
-          <FormInputData
-            form={form}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
+          
         </Box>
       </Modal>
     </>
