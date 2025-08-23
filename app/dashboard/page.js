@@ -2,9 +2,7 @@
 
 import { Card, CardContent, Button } from "@mui/material";
 import { BarChart3, FilePlus2, LayoutDashboard } from "lucide-react";
-import { useState } from "react";
 import { Header } from "../component/header";
-import { useUsers } from "../api/user";
 import { useCurahHujanAllData } from "../api/curah-hujan";
 import dayjs from "dayjs";
 

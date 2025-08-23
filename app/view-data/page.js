@@ -1,5 +1,9 @@
 "use client";
 import { Header } from "../component/header";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import DownloadIcon from "@mui/icons-material/Download";
+import PrintIcon from "@mui/icons-material/Print";
 
 import {
   BarChart,
@@ -14,6 +18,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -195,6 +200,25 @@ function RekapDasarian({ bulan, tahun }) {
 export default function ViewData() {
   const today = new Date();
 
+  const handleExport = () => {
+    if (!rows || rows.length === 0) return;
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Curah Hujan");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(data, `curah-hujan-${bulan}-${tahun}.xlsx`);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   const [tahun, setTahun] = useState(today.getFullYear());
   const [bulan, setBulan] = useState(
     String(today.getMonth() + 1).padStart(2, "0")
@@ -217,8 +241,25 @@ export default function ViewData() {
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-xl font-bold">Data Curah Hujan</h1>
             <div className="flex gap-2">
-              <button className="px-4 py-2 border rounded">Ekspor</button>
-              <button className="px-4 py-2 border rounded">Cetak</button>
+              <div className="flex gap-2">
+                <Button
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  onClick={handleExport}
+                  className="!bg-green-600 hover:!bg-green-600 !normal-case rounded-lg shadow-md px-6 py-2"
+                >
+                  Ekspor
+                </Button>
+
+                <Button
+                  variant="contained"
+                  startIcon={<PrintIcon />}
+                  onClick={handlePrint}
+                  className="!bg-blue-500 hover:!bg-blue-600 !normal-case rounded-lg shadow-md px-6 py-2 ml-5"
+                >
+                  Cetak
+                </Button>
+              </div>
             </div>
           </div>
 

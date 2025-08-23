@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,78 +12,96 @@ import {
   Divider,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useProfile } from "../api/user";
 
 export default function ProfilePage() {
   const router = useRouter();
+  const rows = useProfile();
   const [form, setForm] = useState({
-    kode: "USR-123",
-    jabatan: "Operator Stasiun",
-    email: "john@gmail.com",
-    nomor_telepon: "081234567890",
-    nama: "John",
-    tanggal_lahir: "1988-03-15",
-    alamat:
-      "Jl. Kebon Jeruk No. 15, RT 05/RW 07, Kelurahan Kebon Jeruk, Kecamatan Kebon Jeruk, Jakarta Barat, DKI Jakarta 11530",
-    kode_stasiun: "GMR",
-    tgl_mulai_bekerja: "2018-06-01",
-    departemen: "Operasional",
-    supervisor: "Budi Santoso",
+    kode_user: "",
+    jabatan: "",
+    email: "",
+    foto_profil: "",
+    nomor_telepon: "",
+    nama: "",
+    tanggal_lahir: "",
+    alamat: "",
+    kode_stasiun: "",
+    tgl_mulai_bekerja: "",
+    departemen: "",
+    supervisor: "",
   });
-
+  const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setPreview(URL.createObjectURL(selectedFile));
+
+      setForm((prev) => ({
+        ...prev,
+        foto_profil: selectedFile,
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !form.nama ||
-      !form.email ||
-      !form.jabatan ||
-      !form.alamat ||
-      !form.kode_stasiun
-    ) {
-      alert("Mohon lengkapi semua field yang wajib diisi.");
-      return;
-    }
+
+    const formData = new FormData();
+    Object.keys(form).forEach((key) => {
+      if (form[key]) {
+        formData.append(key, form[key]);
+      }
+    });
+
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/update-profile`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/update-profile/${rows?.id}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify(form),
+          body: formData,
         }
       );
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Gagal mengirim data: ${errorText}`);
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.message || "Gagal mengirim data");
       }
+
       const data = await response.json();
       console.log("Data berhasil dikirim:", data);
 
-      setForm({
-        kode: "",
-        jabatan: "",
-        email: "",
-        nomor_telepon: "",
-        nama: "",
-        tanggal_lahir: "",
-        alamat: "",
-        kode_stasiun: "",
-        tgl_mulai_bekerja: "",
-        departemen: "",
-        supervisor: "",
-      });
+      alert("Profil berhasil diperbarui.");
+      window.location.reload();
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
       alert("Terjadi kesalahan saat mengirim data: " + error.message);
     }
-    console.log(form);
   };
+
+  useEffect(() => {
+    if (rows) {
+      setForm((prev) => ({
+        ...prev,
+        ...rows,
+        tanggal_lahir: rows.tanggal_lahir
+          ? new Date(rows.tanggal_lahir).toISOString().split("T")[0]
+          : "",
+        tgl_mulai_bekerja: rows.tgl_mulai_bekerja
+          ? new Date(rows.tgl_mulai_bekerja).toISOString().split("T")[0]
+          : "",
+      }));
+    }
+  }, [rows]);
 
   return (
     <Box sx={{ p: 4 }}>
@@ -116,19 +134,36 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-1">
               <Avatar
-                //   src="/user.jpg"
-                sx={{ width: 100, height: 100 }}
+                src={preview || rows?.foto_profil}
+                sx={{ width: 100, height: 100, ml: 1 }}
               />
+
+              <input
+                type="file"
+                accept="image/*"
+                id="upload-avatar"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+              <label htmlFor="upload-avatar">
+                <Button
+                  sx={{ textTransform: "none" }}
+                  variant="texted"
+                  component="span"
+                >
+                  Unggah foto
+                </Button>
+              </label>
             </div>
             <div className="flex flex-col gap-1"></div>
             <div className="flex flex-col gap-1">
               <Typography variant="subtitle1" fontWeight="bold">
-                ID Pegawai
+                Kode User
               </Typography>
               <TextField
-                name="id"
+                name="kode_user"
                 fullWidth
-                value={form.kode}
+                value={form.kode_user ?? rows?.kode_user ?? ""}
                 onChange={handleChange}
               />
             </div>
@@ -139,8 +174,9 @@ export default function ProfilePage() {
               </Typography>
               <TextField
                 name="jabatan"
+                placeholder="Masukkan jabatan Anda"
                 fullWidth
-                value={form.jabatan}
+                value={form.jabatan ?? rows?.jabatan ?? ""}
                 onChange={handleChange}
               />
             </div>
@@ -152,7 +188,7 @@ export default function ProfilePage() {
               <TextField
                 name="email"
                 fullWidth
-                value={form.email}
+                value={form.email ?? rows?.email ?? ""}
                 onChange={handleChange}
               />
             </div>
@@ -162,8 +198,9 @@ export default function ProfilePage() {
               </Typography>
               <TextField
                 name="nomor_telepon"
+                placeholder="Masukkan nomor telepon Anda"
                 fullWidth
-                value={form.nomor_telepon}
+                value={form.nomor_telepon ?? rows?.nomor_telepon ?? ""}
                 onChange={handleChange}
               />
             </div>
@@ -184,8 +221,9 @@ export default function ProfilePage() {
               </Typography>
               <TextField
                 name="nama"
+                placeholder="Masukkan nama lengkap Anda"
                 fullWidth
-                value={form.nama}
+                value={form.nama ?? rows?.nama ?? ""}
                 onChange={handleChange}
               />
             </Grid>
@@ -197,7 +235,7 @@ export default function ProfilePage() {
                 type="date"
                 name="tanggal_lahir"
                 fullWidth
-                value={form.tanggal_lahir}
+                value={form.tanggal_lahir ?? rows?.tanggal_lahir ?? ""}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: true }}
               />
@@ -208,10 +246,11 @@ export default function ProfilePage() {
           </Typography>
           <TextField
             name="alamat"
+            placeholder="Masukkan alamat lengkap Anda"
             fullWidth
             multiline
             rows={2}
-            value={form.alamat}
+            value={form.alamat ?? rows?.alamat ?? ""}
             onChange={handleChange}
           />
         </Box>
@@ -231,8 +270,9 @@ export default function ProfilePage() {
               </Typography>
               <TextField
                 name="kode_stasiun"
+                placeholder="Masukkan kode stasiun Anda"
                 fullWidth
-                value={form.kode_stasiun}
+                value={form.kode_stasiun ?? rows?.kode_stasiun ?? ""}
                 onChange={handleChange}
               />
             </Grid>
@@ -245,7 +285,7 @@ export default function ProfilePage() {
                 type="date"
                 name="tgl_mulai_bekerja"
                 fullWidth
-                value={form.tgl_mulai_bekerja}
+                value={form.tgl_mulai_bekerja ?? rows?.tgl_mulai_bekerja ?? ""}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: true }}
               />
@@ -257,8 +297,9 @@ export default function ProfilePage() {
               </Typography>
               <TextField
                 name="departemen"
+                placeholder="Masukkan departemen Anda"
                 fullWidth
-                value={form.departemen}
+                value={form.departemen ?? rows?.departemen ?? ""}
                 onChange={handleChange}
               />
             </Grid>
@@ -269,8 +310,9 @@ export default function ProfilePage() {
               </Typography>
               <TextField
                 name="supervisor"
+                placeholder="Masukkan nama supervisor Anda"
                 fullWidth
-                value={form.supervisor}
+                value={form.supervisor ?? rows?.supervisor ?? ""}
                 onChange={handleChange}
               />
             </Grid>
