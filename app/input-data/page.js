@@ -7,7 +7,7 @@ import { BodyTableViewData, HeadTableViewData } from "../view-data/helper";
 import { useCurahHujanAllData } from "../api/curah-hujan";
 import { colors } from "../utils";
 
-export function FormInputData({ handleSubmit, form, handleChange }) {
+function FormInputData({ handleSubmit, form, handleChange }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
       <h2 className="text-xl font-semibold mb-2">Input Data Curah Hujan</h2>
