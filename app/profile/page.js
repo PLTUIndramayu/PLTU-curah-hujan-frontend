@@ -117,11 +117,12 @@ export default function ProfilePage() {
               onClick={() => {
                 router.push("/dashboard");
               }}
+              sx={{ textTransform: "none"}}
             >
               Batal
             </Button>
             &nbsp; &nbsp;
-            <Button variant="contained" onClick={handleSubmit}>
+            <Button variant="contained" onClick={handleSubmit} sx={{ textTransform: "none"}}>
               Simpan Perubahan
             </Button>
           </div>

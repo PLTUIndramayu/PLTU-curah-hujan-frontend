@@ -6,6 +6,8 @@ import {
   TableRow,
   Modal,
   Box,
+  Table,
+  TablePagination,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FormInputData } from "../input-data/page";
@@ -15,17 +17,19 @@ import { useGetCurahHujanById, useUpdateCurahHujan } from "../api/curah-hujan";
 
 export function HeadTableViewData() {
   return (
-    <TableHead>
-      <TableRow>
-        <TableCell>Tanggal</TableCell>
-        <TableCell>Jam</TableCell>
-        <TableCell>Umur HSS</TableCell>
-        <TableCell>Umur Tanaman</TableCell>
-        <TableCell>Curah Hujan (mm)</TableCell>
-        <TableCell>Sifat Hujan</TableCell>
-        <TableCell>Action</TableCell>
-      </TableRow>
-    </TableHead>
+    <>
+      <TableHead sx={{ width: "100%" }}>
+        <TableRow>
+          <TableCell>Tanggal</TableCell>
+          <TableCell>Jam</TableCell>
+          <TableCell>Umur HSS</TableCell>
+          <TableCell>Umur Tanaman</TableCell>
+          <TableCell>Curah Hujan (mm)</TableCell>
+          <TableCell>Sifat Hujan</TableCell>
+          <TableCell>Action</TableCell>
+        </TableRow>
+      </TableHead>
+    </>
   );
 }
 
@@ -60,7 +64,6 @@ export function BodyTableViewData({ rows }) {
     setSelectedId(id);
     setOpenModal(true);
   };
-
 
   const { updateCurahHujan } = useUpdateCurahHujan();
 
@@ -112,55 +115,69 @@ export function BodyTableViewData({ rows }) {
     }
   }, [dataById, openModal]);
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <>
       <TableBody>
         {Array.isArray(rows) && rows.length > 0 ? (
-          rows.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                {item.tanggal
-                  ? new Date(item.tanggal).toLocaleDateString("id-ID", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
-                  : ""}
-              </TableCell>
-              <TableCell>
-                {item.jam
-                  ? new Date(`1970-01-01T${item.jam}`).toLocaleTimeString(
-                      "id-ID",
-                      {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
-                    )
-                  : ""}
-              </TableCell>
-              <TableCell>{item.umur_hss} hari</TableCell>
-              <TableCell>{item.umur_tanaman} hari</TableCell>
-              <TableCell>{item.curah_hujan}</TableCell>
-              <TableCell>{item.sifat_hujan}</TableCell>
-              <TableCell>
-                <Button
-                  startIcon={<EditIcon />}
-                  sx={{ textTransform: "none" }}
-                  onClick={() => handleOpenModal(item.id)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  startIcon={<DeleteIcon />}
-                  sx={{ textTransform: "none" }}
-                  color="error"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  Hapus
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))
+          rows
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  {item.tanggal
+                    ? new Date(item.tanggal).toLocaleDateString("id-ID", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : ""}
+                </TableCell>
+                <TableCell>
+                  {item.jam
+                    ? new Date(`1970-01-01T${item.jam}`).toLocaleTimeString(
+                        "id-ID",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )
+                    : ""}
+                </TableCell>
+                <TableCell>{item.umur_hss} hari</TableCell>
+                <TableCell>{item.umur_tanaman} hari</TableCell>
+                <TableCell>{item.curah_hujan}</TableCell>
+                <TableCell>{item.sifat_hujan}</TableCell>
+                <TableCell>
+                  <Button
+                    startIcon={<EditIcon />}
+                    sx={{ textTransform: "none" }}
+                    onClick={() => handleOpenModal(item.id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    startIcon={<DeleteIcon />}
+                    sx={{ textTransform: "none" }}
+                    color="error"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Hapus
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
         ) : (
           <TableRow>
             <TableCell colSpan={7} align="center">
@@ -170,6 +187,19 @@ export function BodyTableViewData({ rows }) {
         )}
       </TableBody>
 
+      <>
+        {/* Pagination */}
+        <TablePagination
+          component="div"
+          count={rows.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}
+          labelRowsPerPage="Baris per halaman"
+        />
+      </>
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{

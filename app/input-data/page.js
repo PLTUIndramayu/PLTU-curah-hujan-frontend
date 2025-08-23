@@ -1,10 +1,11 @@
 "use client";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Typography, Table } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "../component/header";
 import { BodyTableViewData, HeadTableViewData } from "../view-data/helper";
 import { useCurahHujanAllData } from "../api/curah-hujan";
+import { colors } from "../utils";
 
 export function FormInputData({ handleSubmit, form, handleChange }) {
   return (
@@ -19,7 +20,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">Hari/Tanggal</label>
+          <Typography>Hari/Tanggal</Typography>
           <TextField
             type="date"
             name="tanggal"
@@ -30,7 +31,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">Jam</label>
+          <Typography>Jam</Typography>
           <TextField
             type="time"
             name="jam"
@@ -41,9 +42,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">
-            Umur HSS (Hari Setelah Semai)
-          </label>
+          <Typography>Umur HSS (Hari Setelah Semai)</Typography>
           <TextField
             type="number"
             name="umur_hss"
@@ -55,9 +54,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">
-            Umur Tanaman (Hari Setelah Tanam)
-          </label>
+          <Typography>Umur Tanaman (Hari Setelah Tanam)</Typography>
           <TextField
             type="number"
             name="umur_tanaman"
@@ -69,7 +66,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">Curah Hujan (mm)</label>
+          <Typography>Curah Hujan (mm)</Typography>
           <TextField
             type="number"
             name="curah_hujan"
@@ -81,7 +78,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">Sifat Hujan</label>
+          <Typography>Sifat Hujan</Typography>
           <TextField
             type="text"
             name="sifat_hujan"
@@ -93,7 +90,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">Varietas</label>
+          <Typography>Varietas</Typography>
           <TextField
             type="text"
             name="varietas"
@@ -105,7 +102,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="font-medium text-gray-700">Sumber Air</label>
+          <Typography>Sumber Air</Typography>
           <TextField
             type="text"
             name="sumber_air"
@@ -117,9 +114,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="md:col-span-2 flex flex-col gap-1">
-          <label className="font-medium text-gray-700">
-            OPT (Organisme Pengganggu Tanaman)
-          </label>
+          <Typography>OPT (Organisme Pengganggu Tanaman)</Typography>
           <TextField
             type="text"
             name="opt"
@@ -131,9 +126,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
         </div>
 
         <div className="md:col-span-2 flex flex-col gap-1">
-          <label className="font-medium text-gray-700">
-            Keterangan (opsional)
-          </label>
+          <Typography>Keterangan (opsional)</Typography>
           <TextField
             name="keterangan"
             className="p-2 border rounded"
@@ -164,7 +157,7 @@ export function FormInputData({ handleSubmit, form, handleChange }) {
 export default function InputData() {
   const rows = useCurahHujanAllData();
   const router = useRouter();
-  
+
   const [form, setForm] = useState({
     tanggal: "",
     jam: "",
@@ -247,11 +240,13 @@ export default function InputData() {
     console.log(form);
   };
 
+  const latestRows = Array.isArray(rows) ? rows.slice(-3).reverse() : [];
+
   return (
     <div className="p-6 space-y-6">
       <Header />
       <div className="min-h-screen bg-gray-100">
-        <div className="max-w-5xl mx-auto p-6 space-y-10">
+        <div className="max-w-7xl mx-auto p-6 space-y-10">
           <br />
 
           <FormInputData
@@ -270,9 +265,21 @@ export default function InputData() {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="border rounded-xl border-white p-4 bg-blue-50 text-center"
+                  className="border rounded-xl border-white p-4 bg-blue-50 text-center flex flex-col items-center"
                 >
-                  <div className="font-bold">{item.label}</div>
+                  <div className="flex justify-between">
+                    <div
+                      style={{
+                        backgroundColor: colors[item.label],
+                        width: 20,
+                        height: 20,
+                        borderRadius: "50%",
+                        marginBottom: 8,
+                        display: "inline-block",
+                      }}
+                    />
+                    <div className="font-bold pl-2">{item.label}</div>
+                  </div>
                   <div className="text-sm text-gray-600">{item.keterangan}</div>
                 </div>
               ))}
@@ -291,10 +298,10 @@ export default function InputData() {
               </a>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full">
+              <Table className="min-w-full">
                 <HeadTableViewData />
-                <BodyTableViewData rows={rows} />
-              </table>
+                <BodyTableViewData rows={latestRows} />
+              </Table>
             </div>
           </div>
         </div>

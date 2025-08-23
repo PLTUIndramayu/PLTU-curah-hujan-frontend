@@ -1,5 +1,6 @@
 import {
   HelpCircle,
+  HomeIcon,
   LogOut as LogOutIcon,
   User as UserIcon,
 } from "lucide-react";
@@ -14,7 +15,15 @@ import {
   Menu,
   MenuItem,
   Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -22,7 +31,9 @@ import Link from "next/link";
 export function Header() {
   const [openDialogLogout, setOpenDialogLogout] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const router = useRouter();
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -37,54 +48,130 @@ export function Header() {
     setAnchorEl(null);
   };
 
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
-    <div className="flex justify-between items-center rounded-xl mx-auto p-2 shadow-md">
-      <header className="bg-white p-4">
-        <h1 className="text-2xl font-bold">Sistem Monitoring Curah Hujan</h1>
-        <p className="text-sm">Pantau data curah hujan secara real-time</p>
+    <div className="bg-white shadow-md rounded-xl mx-auto p-2 flex items-center justify-between"
+      style={{
+        flexDirection: isMobile ? "column" : "row",
+        gap: isMobile ? 12 : 0,
+        padding: isMobile ? "8px" : "16px",
+      }}
+    >
+      <header
+        className="p-2"
+        style={{
+          width: isMobile ? "100%" : "auto",
+          textAlign: isMobile ? "center" : "left",
+        }}
+      >
+        <h1
+          className="font-bold"
+          style={{
+            fontSize: isMobile ? "1.2rem" : "2rem",
+          }}
+        >
+          Sistem Monitoring Curah Hujan
+        </h1>
+        <p
+          className="text-sm"
+          style={{
+            fontSize: isMobile ? "0.9rem" : "1rem",
+          }}
+        >
+          Pantau data curah hujan secara real-time
+        </p>
       </header>
 
-      <div className="flex gap-2">
-        <Link href="https://www.whatsapp.com" passHref>
-          <Button
-            variant="outlined"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2"
+      {isMobile ? (
+        <>
+          <IconButton
+            edge="end"
+            color="primary"
+            aria-label="menu"
+            onClick={handleDrawerToggle}
+            sx={{ ml: "auto" }}
           >
-            <HelpCircle className="w-4 h-4" /> Bantuan
+            <MenuIcon />
+          </IconButton>
+          <Drawer
+            anchor="right"
+            open={drawerOpen}
+            onClose={handleDrawerToggle}
+          >
+            <Box sx={{ width: 220 }}>
+              <List>
+                <ListItem button onClick={() => { setDrawerOpen(false); router.push("/dashboard"); }}>
+                  <ListItemIcon>
+                    <HomeIcon size={18} />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button component={Link} href="https://www.whatsapp.com" target="_blank" rel="noopener noreferrer">
+                  <ListItemIcon>
+                    <HelpCircle className="w-4 h-4" />
+                  </ListItemIcon>
+                  <ListItemText primary="Bantuan" />
+                </ListItem>
+                <ListItem button onClick={() => { setDrawerOpen(false); router.push("/profile"); }}>
+                  <ListItemIcon>
+                    <UserIcon size={18} />
+                  </ListItemIcon>
+                  <ListItemText primary="Profil Saya" />
+                </ListItem>
+                <ListItem button onClick={() => { setDrawerOpen(false); setOpenDialogLogout(true); }}>
+                  <ListItemIcon>
+                    <LogOutIcon size={18} />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItem>
+              </List>
+            </Box>
+          </Drawer>
+        </>
+      ) : (
+        <div className="flex gap-2">
+          <Link href="https://www.whatsapp.com" passHref>
+            <Button
+              variant="outlined"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <HelpCircle className="w-4 h-4" /> Bantuan
+            </Button>
+          </Link>
+          <Button variant="outlined" onClick={handleMenuOpen}>
+            Profil
           </Button>
-        </Link>
-
-        {/* Profil dengan dropdown */}
-        <Button variant="outlined" onClick={handleMenuOpen}>
-          Profil
-        </Button>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem
-            onClick={() => {
-              handleMenuClose();
-              router.push("/profile");
-            }}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
           >
-            <UserIcon size={18} style={{ marginRight: 8 }} />
-            Profil Saya
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleMenuClose();
-              setOpenDialogLogout(true);
-            }}
-          >
-            <LogOutIcon size={18} style={{ marginRight: 8 }} />
-            Logout
-          </MenuItem>
-        </Menu>
-      </div>
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                router.push("/profile");
+              }}
+            >
+              <UserIcon size={18} style={{ marginRight: 8 }} />
+              Profil Saya
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                setOpenDialogLogout(true);
+              }}
+            >
+              <LogOutIcon size={18} style={{ marginRight: 8 }} />
+              Logout
+            </MenuItem>
+          </Menu>
+        </div>
+      )}
 
       {/* Dialog Logout */}
       <Dialog

@@ -24,6 +24,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  FormControl,
+  Select,
+  MenuItem,
+  Grid,
 } from "@mui/material";
 import { BodyTableViewData, HeadTableViewData } from "./helper";
 import { useCurahHujanByMonth } from "../api/curah-hujan";
@@ -65,13 +69,13 @@ function RekapBulanan() {
       <h3 className="font-semibold mb-2">
         Rekap Bulanan - {namaBulan[bulan - 1]} {tahun}
       </h3>
-      <p className="text-sm mb-2 mt-8">
+      <p className="text-sm mb-4 mt-8">
         Total Curah Hujan: <strong>{totalCurah.toFixed(1)} mm</strong>
       </p>
-      <p className="text-sm mb-2">
+      <p className="text-sm mb-4">
         Jumlah Hari Hujan: <strong>{jumlahHariHujan} hari</strong>
       </p>
-      <p className="text-sm mb-2">
+      <p className="text-sm mb-4">
         Curah Hujan Tertinggi:{" "}
         <strong>
           {tertinggi.curah_hujan.toFixed(1)} mm (
@@ -226,27 +230,30 @@ export default function ViewData() {
 
   const rows = useCurahHujanByMonth(bulan, tahun);
 
-  // const handleFilter = () => {
-  //   // trigger useEffect di hook karena bulan/tahun berubah
-  // };
-
   return (
     <>
       <div className="p-6 space-y-6">
         <Header />
       </div>
       <div className="p-6 bg-gray-100 min-h-screen">
-        <div className="max-w-5xl mx-auto p-1 space-y-10">
+        <div className="max-w-7xl mx-auto p-1 space-y-10">
           {/* Header */}
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
             <h1 className="text-xl font-bold">Data Curah Hujan</h1>
             <div className="flex gap-2">
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   variant="contained"
                   startIcon={<DownloadIcon />}
                   onClick={handleExport}
                   className="!bg-green-600 hover:!bg-green-600 !normal-case rounded-lg shadow-md px-6 py-2"
+                  sx={{
+                    textTransform: "none",
+                    borderRadius: 2,
+                    boxShadow: 2,
+                    px: 3,
+                    py: 1,
+                  }}
                 >
                   Ekspor
                 </Button>
@@ -256,6 +263,13 @@ export default function ViewData() {
                   startIcon={<PrintIcon />}
                   onClick={handlePrint}
                   className="!bg-blue-500 hover:!bg-blue-600 !normal-case rounded-lg shadow-md px-6 py-2 ml-5"
+                  sx={{
+                    textTransform: "none",
+                    borderRadius: 2,
+                    boxShadow: 2,
+                    px: 3,
+                    py: 1,
+                  }}
                 >
                   Cetak
                 </Button>
@@ -265,54 +279,75 @@ export default function ViewData() {
 
           {/* Filter */}
           <div className="flex gap-4 mb-4">
-            <select
-              className="border p-2 rounded"
-              value={tahun}
-              onChange={(e) => setTahun(e.target.value)}
-            >
-              <option value="2023">2023</option>
-              <option value="2024">2024</option>
-              <option value="2025">2025</option>
-            </select>
-            <select
-              className="border p-2 rounded"
-              value={bulan}
-              onChange={(e) => setBulan(e.target.value)}
-            >
-              <option value="01">Januari</option>
-              <option value="02">Februari</option>
-              <option value="03">Maret</option>
-              <option value="04">April</option>
-              <option value="05">Mei</option>
-              <option value="06">Juni</option>
-              <option value="07">Juli</option>
-              <option value="08">Agustus</option>
-              <option value="09">September</option>
-              <option value="10">Oktober</option>
-              <option value="11">November</option>
-              <option value="12">Desember</option>
-            </select>
-            {/* <button
-              onClick={handleFilter}
-              className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Tampilkan Data
-            </button> */}
+            <Grid container spacing={2}>
+              {/* Tahun */}
+              <Grid item xs={12} md={6}>
+                <FormControl
+                  size="small"
+                  fullWidth
+                  sx={{
+                    backgroundColor: "white",
+                    border: 0,
+                  }}
+                >
+                  <Select
+                    labelId="tahun-label"
+                    value={tahun}
+                    onChange={(e) => setTahun(e.target.value)}
+                  >
+                    <MenuItem value="2023">2023</MenuItem>
+                    <MenuItem value="2024">2024</MenuItem>
+                    <MenuItem value="2025">2025</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              {/* Bulan */}
+              <Grid item xs={12} md={6}>
+                <FormControl
+                  size="small"
+                  fullWidth
+                  sx={{
+                    backgroundColor: "white",
+                    border: 0,
+                  }}
+                >
+                  <Select
+                    labelId="bulan-label"
+                    value={bulan}
+                    onChange={(e) => setBulan(e.target.value)}
+                  >
+                    <MenuItem value="01">Januari</MenuItem>
+                    <MenuItem value="02">Februari</MenuItem>
+                    <MenuItem value="03">Maret</MenuItem>
+                    <MenuItem value="04">April</MenuItem>
+                    <MenuItem value="05">Mei</MenuItem>
+                    <MenuItem value="06">Juni</MenuItem>
+                    <MenuItem value="07">Juli</MenuItem>
+                    <MenuItem value="08">Agustus</MenuItem>
+                    <MenuItem value="09">September</MenuItem>
+                    <MenuItem value="10">Oktober</MenuItem>
+                    <MenuItem value="11">November</MenuItem>
+                    <MenuItem value="12">Desember</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
           </div>
 
           {/* Tabel */}
-          <div className="bg-white rounded shadow p-8 mb-6">
+          <div className="bg-white rounded shadow p-8 mb-6 overflow-x-auto">
             <h2 className="font-semibold mb-2">
-              Data Curah Hujan Harian - {bulan}/{tahun}
+              Data Curah Hujan Harian - Bulan {namaBulan[bulan - 1]} {tahun}
             </h2>
-            <table className="w-full border-collapse">
+            <Table className="min-w-[600px] border-collapse">
               <HeadTableViewData />
               <BodyTableViewData rows={rows} />
-            </table>
+            </Table>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-white p-8 rounded shadow">
+            <div className="bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-md overflow-x-auto">
               <RekapDasarian data={rows} />
             </div>
 
@@ -345,7 +380,9 @@ export default function ViewData() {
             <RekapBulanan />
 
             <div className="bg-white p-8 rounded shadow">
-              <h3 className="font-semibold mb-2">Statistik</h3>
+              <h3 className="font-semibold mb-2">
+                Statistik Bulan {namaBulan[bulan - 1]} {tahun}
+              </h3>
               <RekapSifatHujan data={rows} />
             </div>
           </div>

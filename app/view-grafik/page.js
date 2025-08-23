@@ -1,6 +1,9 @@
 "use client";
-
-import React, { useState, useMemo } from "react";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { useState, useMemo } from "react";
+import DownloadIcon from "@mui/icons-material/Download";
+import PrintIcon from "@mui/icons-material/Print";
 
 import {
   Box,
@@ -124,14 +127,76 @@ function ViewGrafikTahunan() {
   const tertinggi = Math.max(...lineData.map((d) => d.curah_hujan), 0);
   const terendah = Math.min(...lineData.map((d) => d.curah_hujan), 0);
 
+  const handleExport = () => {
+    if (!rows || rows.length === 0) return;
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Curah Hujan");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(data, `curah-hujan-${bulan}-${tahun}.xlsx`);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
   return (
     <Box p={5}>
-      <Typography variant="h5" fontWeight="bold">
-        Grafik Curah Hujan
-      </Typography>
-      <Typography variant="body2" color="text.secondary" mb={2}>
-        Visualisasi tren curah hujan berdasarkan periode
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography variant="h5" fontWeight="bold">
+            Grafik Curah Hujan
+          </Typography>
+          <Typography variant="body2" color="text.secondary" mb={2}>
+            Visualisasi tren curah hujan berdasarkan periode
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            onClick={handleExport}
+            className="!bg-green-600 hover:!bg-green-600 !normal-case rounded-lg shadow-md px-6 py-2"
+            sx={{
+              textTransform: "none",
+              borderRadius: 2,
+              boxShadow: 2,
+              px: 3,
+              py: 1,
+            }}
+          >
+            Ekspor
+          </Button>
+
+          <Button
+            variant="contained"
+            startIcon={<PrintIcon />}
+            onClick={handlePrint}
+            className="!bg-blue-500 hover:!bg-blue-600 !normal-case rounded-lg shadow-md px-6 py-2 ml-5"
+            sx={{
+              textTransform: "none",
+              borderRadius: 2,
+              boxShadow: 2,
+              px: 3,
+              py: 1,
+            }}
+          >
+            Cetak
+          </Button>
+        </Box>
+      </Box>
 
       {/* Grafik */}
       <Card sx={{ mb: 2 }}>
@@ -148,7 +213,17 @@ function ViewGrafikTahunan() {
           </ToggleButtonGroup>
 
           {/* Filter */}
-          <Box display="flex" gap={2} mb={2}>
+          <Box display="flex" gap={2} mb={2} mt={2}>
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <Select value={tahun} onChange={(e) => setTahun(e.target.value)}>
+                {[2025].map((y) => (
+                  <MenuItem key={y} value={String(y)}>
+                    {y}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             {periode !== "Tahunan" && (
               <FormControl size="small" sx={{ minWidth: 120 }}>
                 <Select
@@ -166,19 +241,10 @@ function ViewGrafikTahunan() {
                 </Select>
               </FormControl>
             )}
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <Select value={tahun} onChange={(e) => setTahun(e.target.value)}>
-                {[2025].map((y) => (
-                  <MenuItem key={y} value={String(y)}>
-                    {y}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </Box>
-
+          <br />
           {/* Grafik Line */}
-          <LineChart width={1150} height={300} data={lineData}>
+          <LineChart width={1250} height={300} data={lineData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -239,7 +305,7 @@ function ViewChart() {
   );
 
   return (
-    <Box p={5}>
+    <Box pl={5} pr={5} pb={5}>
       {/* Statistik */}
       <Box display="flex" gap={2} flexWrap="wrap">
         <Card sx={{ flex: 1 }}>
@@ -247,6 +313,8 @@ function ViewChart() {
             <Typography variant="subtitle1" fontWeight="bold">
               Statistik Bulanan
             </Typography>
+            <br />
+            <br />
             <BarChart width={300} height={200} data={lineData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -279,8 +347,9 @@ function ViewChart() {
             <Typography variant="subtitle1" fontWeight="bold">
               Distribusi Curah Hujan
             </Typography>
+
             {pieData.length > 0 ? (
-              <PieChart width={300} height={200}>
+              <PieChart width={300} height={300}>
                 <Pie
                   dataKey="value"
                   data={pieData}
@@ -295,6 +364,7 @@ function ViewChart() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
+
                 <Tooltip />
                 <Legend />
               </PieChart>
