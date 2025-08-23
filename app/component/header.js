@@ -2,6 +2,7 @@ import {
   HelpCircle,
   HomeIcon,
   LogOut as LogOutIcon,
+  PencilIcon,
   User as UserIcon,
 } from "lucide-react";
 import { AlertTriangle } from "lucide-react";
@@ -27,6 +28,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useProfile } from "../api/user";
 
 export function Header() {
   const [openDialogLogout, setOpenDialogLogout] = useState(false);
@@ -52,8 +54,11 @@ export function Header() {
     setDrawerOpen(!drawerOpen);
   };
 
+  const data = useProfile();
+
   return (
-    <div className="bg-white shadow-md rounded-xl mx-auto p-2 flex items-center justify-between"
+    <div
+      className="bg-white shadow-md rounded-xl mx-auto p-2 flex items-center justify-between"
       style={{
         flexDirection: isMobile ? "column" : "row",
         gap: isMobile ? 12 : 0,
@@ -96,32 +101,52 @@ export function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <Drawer
-            anchor="right"
-            open={drawerOpen}
-            onClose={handleDrawerToggle}
-          >
+          <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
             <Box sx={{ width: 220 }}>
               <List>
-                <ListItem button onClick={() => { setDrawerOpen(false); router.push("/dashboard"); }}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    router.push("/dashboard");
+                  }}
+                >
                   <ListItemIcon>
                     <HomeIcon size={18} />
                   </ListItemIcon>
                   <ListItemText primary="Dashboard" />
                 </ListItem>
-                <ListItem button component={Link} href="https://www.whatsapp.com" target="_blank" rel="noopener noreferrer">
+                <ListItem
+                  button
+                  component={Link}
+                  href="https://www.whatsapp.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <ListItemIcon>
                     <HelpCircle className="w-4 h-4" />
                   </ListItemIcon>
                   <ListItemText primary="Bantuan" />
                 </ListItem>
-                <ListItem button onClick={() => { setDrawerOpen(false); router.push("/profile"); }}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    router.push("/profile");
+                  }}
+                >
                   <ListItemIcon>
                     <UserIcon size={18} />
                   </ListItemIcon>
                   <ListItemText primary="Profil Saya" />
                 </ListItem>
-                <ListItem button onClick={() => { setDrawerOpen(false); setOpenDialogLogout(true); }}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    setOpenDialogLogout(true);
+                  }}
+                >
                   <ListItemIcon>
                     <LogOutIcon size={18} />
                   </ListItemIcon>
@@ -154,12 +179,33 @@ export function Header() {
             <MenuItem
               onClick={() => {
                 handleMenuClose();
+                router.push("/dashboard");
+              }}
+            >
+              <HomeIcon size={18} style={{ marginRight: 8 }} />
+              Dashboard
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
                 router.push("/profile");
               }}
             >
               <UserIcon size={18} style={{ marginRight: 8 }} />
               Profil Saya
             </MenuItem>
+
+            {data?.role === "admin" && (
+              <MenuItem
+                onClick={() => {
+                  handleMenuClose();
+                  router.push("/register");
+                }}
+              >
+                <PencilIcon size={18} style={{ marginRight: 8 }} />
+                Buat Akun Baru
+              </MenuItem>
+            )}
             <MenuItem
               onClick={() => {
                 handleMenuClose();

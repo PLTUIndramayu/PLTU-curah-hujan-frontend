@@ -5,6 +5,7 @@ import { BarChart3, FilePlus2, LayoutDashboard } from "lucide-react";
 import { Header } from "../component/header";
 import { useCurahHujanAllData } from "../api/curah-hujan";
 import dayjs from "dayjs";
+import ProtectedRoute from "../component/ProtectedRoute";
 
 export default function DashboardPage() {
 
@@ -32,7 +33,7 @@ export default function DashboardPage() {
       : "-";
 
   return (
-    <>
+    <ProtectedRoute>
       <div className="p-6 space-y-6">
         <Header />
         <p className="pl-5 pt-5 text-muted-foreground">
@@ -131,6 +132,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </>
+    </ProtectedRoute>
   );
 }

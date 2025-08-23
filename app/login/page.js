@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import PublicRoute from "../component/PublicRoute";
 import {
   Box,
   Card,
@@ -54,7 +55,7 @@ export default function LoginPage() {
   };
 
   return (
-    <>
+    <PublicRoute>
       <Box
         sx={{
           minHeight: "100vh",
@@ -66,7 +67,6 @@ export default function LoginPage() {
           p: 2,
         }}
       >
-        {/* Judul Sistem */}
         <Typography variant="h5" color="primary" fontWeight="bold" mb={4}>
           Sistem Monitoring Curah Hujan
         </Typography>
@@ -89,7 +89,6 @@ export default function LoginPage() {
               <LockOutlinedIcon sx={{ fontSize: 48, color: "primary.main" }} />
             </Box>
 
-            {/* Judul Form */}
             <Typography variant="h5" textAlign="center" fontWeight="600">
               Login
             </Typography>
@@ -146,7 +145,7 @@ export default function LoginPage() {
               </Button>
 
               {/* Lupa Password */}
-              <Box textAlign="center" mb={2}>
+              <Box textAlign="center" mb={2} mt={1}>
                 <Link
                   href="#"
                   underline="hover"
@@ -185,6 +184,6 @@ export default function LoginPage() {
           Curah Hujan. Hak Cipta Dilindungi.
         </Typography>
       </Box>
-    </>
+    </PublicRoute>
   );
 }
