@@ -68,7 +68,7 @@ export default function DashboardPage() {
                 Lihat Data Curah Hujan
               </h2>
               <p className="text-sm text-muted-foreground">
-                Akses data historis curah hujan.
+                Akses data historis curah hujan bulanan.
               </p>
               <Button
                 variant="contained"

@@ -1,6 +1,7 @@
 import {
   HelpCircle,
   HomeIcon,
+  ListIcon,
   LogOut as LogOutIcon,
   PencilIcon,
   User as UserIcon,
@@ -206,6 +207,19 @@ export function Header() {
                 Buat Akun Baru
               </MenuItem>
             )}
+
+            {data?.role === "admin" && (
+              <MenuItem
+                onClick={() => {
+                  handleMenuClose();
+                  router.push("/view-list-user");
+                }}
+              >
+                <ListIcon size={18} style={{ marginRight: 8 }} />
+                Lihat Daftar User
+              </MenuItem>
+            )}
+
             <MenuItem
               onClick={() => {
                 handleMenuClose();
