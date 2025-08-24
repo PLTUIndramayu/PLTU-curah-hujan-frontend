@@ -239,7 +239,7 @@ export default function ViewData() {
         <div className="max-w-7xl mx-auto p-1 space-y-10">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
-            <h1 className="text-xl font-bold">Data Curah Hujan</h1>
+            <h1 className="text-xl font-bold">Data Curah Hujan Bulanan</h1>
             <div className="flex gap-2">
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
@@ -370,7 +370,7 @@ export default function ViewData() {
                       new Date(label).toLocaleDateString("id-ID")
                     }
                   />
-                  <Bar dataKey="curah_hujan" fill="#60A5FA" />
+                  <Bar dataKey="curah_hujan" fill="#1976d2" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

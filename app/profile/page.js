@@ -1,5 +1,5 @@
 "use client";
-
+import { AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -10,6 +10,10 @@ import {
   Grid,
   Paper,
   Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useProfile } from "../api/user";
@@ -103,6 +107,38 @@ export default function ProfilePage() {
       }));
     }
   }, [rows]);
+
+  const handleHapusAkun = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/delete-user${rows?.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.message || "Gagal menghapus akun");
+      }
+
+      const data = await response.json();
+
+      alert("Akun berhasil dihapus.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+      alert("Terjadi kesalahan saat menghapus akun: " + error.message);
+    }
+  };
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   return (
     <Box>
@@ -341,10 +377,11 @@ export default function ProfilePage() {
             <Divider sx={{ my: 1 }} />
 
             <Box mt={2}>
-              <Button sx={{ textTransform: "none" }} variant="outlined">
+              {/* <Button sx={{ textTransform: "none" }} variant="outlined">
                 Ubah Kata Sandi
-              </Button>
+              </Button> */}
               <Button
+                onClick={() => setOpenDialog(true)}
                 sx={{ ml: 2, textTransform: "none" }}
                 variant="outlined"
                 color="error"
@@ -354,6 +391,52 @@ export default function ProfilePage() {
             </Box>
           </Box>
         </Paper>
+
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          PaperProps={{
+            sx: { borderRadius: 3, padding: 1, minWidth: 350 },
+          }}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={{ mt: 2 }}
+          >
+            <AlertTriangle size={40} color="#f44336" />
+            <DialogTitle
+              sx={{ fontWeight: "bold", textAlign: "center", mt: 1 }}
+            >
+              Konfirmasi Hapus Akun
+            </DialogTitle>
+          </Box>
+
+          <DialogContent>
+            <Typography variant="body1" textAlign="center">
+              Apakah Anda yakin ingin menghapus akun ini?
+            </Typography>
+          </DialogContent>
+
+          <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
+            <Button
+              onClick={() => setOpenDialog(false)}
+              variant="outlined"
+              sx={{ borderRadius: 2, px: 3 }}
+            >
+              Batal
+            </Button>
+            <Button
+              onClick={handleHapusAkun}
+              color="error"
+              variant="contained"
+              sx={{ borderRadius: 2, px: 3 }}
+            >
+              Hapus
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </Box>
   );

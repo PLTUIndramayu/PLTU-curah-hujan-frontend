@@ -30,6 +30,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  ResponsiveContainer,
 } from "recharts";
 import dayjs from "dayjs";
 import { useCurahHujanAllData } from "../api/curah-hujan";
@@ -89,12 +90,11 @@ function ViewGrafikTahunan() {
     return rows;
   }, [rows, periode, bulan, tahun]);
 
-  // === Olah data untuk grafik ===
   const lineData = useMemo(() => {
     if (periode === "Bulanan") {
       return filteredData.map((item) => ({
         name: dayjs(item.tanggal).format("DD"),
-        curah_hujan: item.curah_hujan, // Sesuaikan nama field
+        curah_hujan: item.curah_hujan,
       }));
     }
     if (periode === "Dasarian") {
@@ -205,7 +205,7 @@ function ViewGrafikTahunan() {
             value={periode}
             exclusive
             onChange={(e, val) => val && setPeriode(val)}
-            sx={{ mb: 2 }}
+            sx={{ mb: 2, flexWrap: "wrap" }}
           >
             <ToggleButton value="Bulanan">Bulanan</ToggleButton>
             <ToggleButton value="Dasarian">Dasarian</ToggleButton>
@@ -213,7 +213,7 @@ function ViewGrafikTahunan() {
           </ToggleButtonGroup>
 
           {/* Filter */}
-          <Box display="flex" gap={2} mb={2} mt={2}>
+          <Box display="flex" gap={2} mb={2} mt={2} flexWrap="wrap">
             <FormControl size="small" sx={{ minWidth: 120 }}>
               <Select value={tahun} onChange={(e) => setTahun(e.target.value)}>
                 {[2025].map((y) => (
@@ -242,16 +242,20 @@ function ViewGrafikTahunan() {
               </FormControl>
             )}
           </Box>
-          <br />
-          {/* Grafik Line */}
-          <LineChart width={1250} height={300} data={lineData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="curah_hujan" stroke="#1976d2" />
-          </LineChart>
+
+          {/* Grafik Line Responsive */}
+          <Box sx={{ width: "100%", height: 300 }}>
+            <ResponsiveContainer>
+              <LineChart data={lineData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="curah_hujan" stroke="#1976d2" />
+              </LineChart>
+            </ResponsiveContainer>
+          </Box>
 
           {/* Statistik */}
           <Typography variant="body2" mt={2}>
@@ -270,7 +274,6 @@ function ViewGrafikTahunan() {
 }
 
 function ViewChart() {
-  const [periode, setPeriode] = useState("Bulanan");
   const rows = useCurahHujanAllData();
 
   const lineData = useMemo(() => {
@@ -313,15 +316,18 @@ function ViewChart() {
             <Typography variant="subtitle1" fontWeight="bold">
               Statistik Bulanan
             </Typography>
-            <br />
-            <br />
-            <BarChart width={300} height={200} data={lineData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="curah_hujan" fill="#1976d2" />
-            </BarChart>
+            <Box sx={{ width: "100%", height: 250 }}>
+              <ResponsiveContainer>
+                <BarChart data={lineData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="curah_hujan" fill="#1976d2" />
+                </BarChart>
+              </ResponsiveContainer>
+            </Box>
+
             <Typography variant="body2">
               Rata-rata:{" "}
               {lineData.length
@@ -349,25 +355,28 @@ function ViewChart() {
             </Typography>
 
             {pieData.length > 0 ? (
-              <PieChart width={300} height={300}>
-                <Pie
-                  dataKey="value"
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  label={(entry) =>
-                    `${entry.name || "Tidak ada"}: ${entry.value}`
-                  }
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-
-                <Tooltip />
-                <Legend />
-              </PieChart>
+              <Box sx={{ width: "100%", height: 300 }}>
+                <ResponsiveContainer>
+                  <PieChart>
+                    <Pie
+                      dataKey="value"
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius="80%"
+                      label={(entry) =>
+                        `${entry.name || "Tidak ada"}: ${entry.value}`
+                      }
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </Box>
             ) : (
               <Typography variant="body2" color="text.secondary">
                 Tidak ada data untuk ditampilkan

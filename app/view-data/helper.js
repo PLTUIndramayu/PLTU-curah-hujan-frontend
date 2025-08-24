@@ -155,10 +155,10 @@ export function BodyTableViewData({ rows }) {
                       )
                     : ""}
                 </TableCell>
-                <TableCell>{item.umur_hss} hari</TableCell>
-                <TableCell>{item.umur_tanaman} hari</TableCell>
-                <TableCell>{item.curah_hujan}</TableCell>
-                <TableCell>{item.sifat_hujan}</TableCell>
+                <TableCell>{item.umur_hss  || '-'} hari</TableCell>
+                <TableCell>{item.umur_tanaman  || '-'} hari</TableCell>
+                <TableCell>{item.curah_hujan  || '-'}</TableCell>
+                <TableCell>{item.sifat_hujan  || '-'  }</TableCell>
                 <TableCell>
                   <Button
                     startIcon={<EditIcon />}
