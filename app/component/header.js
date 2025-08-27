@@ -141,6 +141,34 @@ export function Header() {
                   </ListItemIcon>
                   <ListItemText primary="Profil Saya" />
                 </ListItem>
+                {data?.role === "admin" && (
+                  <ListItem
+                    button
+                    onClick={() => {
+                      setDrawerOpen(false);
+                      router.push("/register");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <PencilIcon size={18} />
+                    </ListItemIcon>
+                    <ListItemText primary="Buat Akun Baru" />
+                  </ListItem>
+                )}
+                {data?.role === "admin" && (
+                  <ListItem
+                    button
+                    onClick={() => {
+                      setDrawerOpen(false);
+                      router.push("/view-list-user");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <ListIcon size={18} />
+                    </ListItemIcon>
+                    <ListItemText primary="Lihat Daftar User" />
+                  </ListItem>
+                )}
                 <ListItem
                   button
                   onClick={() => {

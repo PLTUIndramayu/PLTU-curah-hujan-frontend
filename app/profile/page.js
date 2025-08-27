@@ -140,6 +140,34 @@ export default function ProfilePage() {
 
   const [openDialog, setOpenDialog] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setEmail("");
+    setMessage("");
+  };
+
+  const handleForgot = async (e) => {
+    e.preventDefault();
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/forgot-password`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
+    alert(
+      "Link reset password telah dikirim ke email Anda. Cek spam jika tidak menemukan emailnya."
+    );
+    const data = await res.json();
+    setMessage(data.message);
+  };
+
   return (
     <Box>
       <div className="p-6 space-y-6">
@@ -377,9 +405,13 @@ export default function ProfilePage() {
             <Divider sx={{ my: 1 }} />
 
             <Box mt={2}>
-              {/* <Button sx={{ textTransform: "none" }} variant="outlined">
+              <Button
+                sx={{ textTransform: "none" }}
+                variant="outlined"
+                onClick={handleOpen}
+              >
                 Ubah Kata Sandi
-              </Button> */}
+              </Button>
               <Button
                 onClick={() => setOpenDialog(true)}
                 sx={{ ml: 2, textTransform: "none" }}
@@ -436,6 +468,45 @@ export default function ProfilePage() {
               Hapus
             </Button>
           </DialogActions>
+        </Dialog>
+
+        <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
+          <DialogTitle>Lupa Password</DialogTitle>
+          <DialogContent>
+            <form onSubmit={handleForgot}>
+              <TextField
+                type="email"
+                placeholder="Masukkan email*"
+                fullWidth
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                margin="normal"
+                required
+              />
+              {/* {message && (
+                <Typography variant="body2"  sx={{ mt: 1 }}>
+                  {message}
+                </Typography>
+              )} */}
+              <DialogActions sx={{ px: 0, pt: 2 }}>
+                <Button
+                  color="error"
+                  onClick={handleClose}
+                  sx={{ textTransform: "none" }}
+                >
+                  Batal
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ textTransform: "none", borderRadius: 3 }}
+                  onClick={() => setOpen(false)}
+                >
+                  Kirim Link Reset
+                </Button>
+              </DialogActions>
+            </form>
+          </DialogContent>
         </Dialog>
       </div>
     </Box>
