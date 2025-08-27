@@ -21,11 +21,12 @@ export function HeadTableViewData() {
       <TableHead sx={{ width: "100%" }}>
         <TableRow>
           <TableCell>Tanggal</TableCell>
-          <TableCell>Jam</TableCell>
+
           <TableCell>Umur HSS</TableCell>
           <TableCell>Umur Tanaman</TableCell>
           <TableCell>Curah Hujan (mm)</TableCell>
           <TableCell>Sifat Hujan</TableCell>
+          <TableCell>Diinput oleh</TableCell>
           <TableCell>Action</TableCell>
         </TableRow>
       </TableHead>
@@ -144,21 +145,12 @@ export function BodyTableViewData({ rows }) {
                       })
                     : ""}
                 </TableCell>
-                <TableCell>
-                  {item.jam
-                    ? new Date(`1970-01-01T${item.jam}`).toLocaleTimeString(
-                        "id-ID",
-                        {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }
-                      )
-                    : ""}
-                </TableCell>
-                <TableCell>{item.umur_hss  || '-'} hari</TableCell>
-                <TableCell>{item.umur_tanaman  || '-'} hari</TableCell>
-                <TableCell>{item.curah_hujan  || '-'}</TableCell>
-                <TableCell>{item.sifat_hujan  || '-'  }</TableCell>
+
+                <TableCell>{item.umur_hss || "-"} hari</TableCell>
+                <TableCell>{item.umur_tanaman || "-"} hari</TableCell>
+                <TableCell>{item.curah_hujan || "-"}</TableCell>
+                <TableCell>{item.sifat_hujan || "-"}</TableCell>
+                <TableCell>{item.User?.nama || "-"}</TableCell>
                 <TableCell>
                   <Button
                     startIcon={<EditIcon />}
@@ -216,9 +208,7 @@ export function BodyTableViewData({ rows }) {
             maxHeight: "80vh",
             overflowY: "auto",
           }}
-        >
-          
-        </Box>
+        ></Box>
       </Modal>
     </>
   );
