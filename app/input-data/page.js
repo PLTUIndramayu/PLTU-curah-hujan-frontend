@@ -9,19 +9,22 @@ import { colors } from "../utils";
 
 function FormInputData({ handleSubmit, form, handleChange }) {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md">
-      <h2 className="text-xl font-semibold mb-2">Input Data Curah Hujan</h2>
+    <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+      <h2 className="text-lg sm:text-xl font-semibold mb-2">
+        Input Data Curah Hujan
+      </h2>
       <p className="text-sm text-gray-600 mb-6">
         Formulir pencatatan data harian curah hujan
       </p>
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"
       >
         <div className="flex flex-col gap-1">
           <Typography>Hari/Tanggal</Typography>
           <TextField
+            fullWidth
             type="date"
             name="tanggal"
             className="p-2 border rounded"
@@ -33,6 +36,7 @@ function FormInputData({ handleSubmit, form, handleChange }) {
         <div className="flex flex-col gap-1">
           <Typography>Jam</Typography>
           <TextField
+            fullWidth
             type="time"
             name="jam"
             className="p-2 border rounded"
@@ -243,10 +247,10 @@ export default function InputData() {
   const latestRows = Array.isArray(rows) ? rows.slice(-3).reverse() : [];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6 sm:space-y-10">
       <Header />
       <div className="min-h-screen bg-gray-100">
-        <div className="max-w-7xl mx-auto p-6 space-y-10">
+        <div className="max-w-full sm:max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-10">
           <br />
 
           <FormInputData
@@ -255,9 +259,9 @@ export default function InputData() {
             handleChange={handleChange}
           />
 
-          <div className="bg-white p-6 rounded-xl shadow-md">
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
             <h3 className="font-semibold mb-4">Informasi Sifat Hujan</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { label: "Ringan", keterangan: "Curah hujan: 0 - 5 mm/hari" },
                 { label: "Sedang", keterangan: "Curah hujan: 5 - 20 mm/hari" },
@@ -286,9 +290,8 @@ export default function InputData() {
             </div>
           </div>
 
-          {/* Data Terakhir */}
-          <div className="bg-white p-6 rounded-xl shadow-md">
-            <div className="flex justify-between mb-4">
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+            <div className="flex flex-col sm:flex-row justify-between mb-4 gap-2">
               <h3 className="font-semibold">Data Terakhir Diinput</h3>
               <a
                 href="/view-data"
@@ -297,6 +300,7 @@ export default function InputData() {
                 Lihat Semua
               </a>
             </div>
+
             <div className="overflow-x-auto">
               <Table className="min-w-full">
                 <HeadTableViewData />

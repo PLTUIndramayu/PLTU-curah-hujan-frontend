@@ -170,7 +170,6 @@ export function HeadTableViewData() {
       <TableHead sx={{ width: "100%" }}>
         <TableRow>
           <TableCell>Tanggal</TableCell>
-
           <TableCell>Umur HSS</TableCell>
           <TableCell>Umur Tanaman</TableCell>
           <TableCell>Curah Hujan (mm)</TableCell>
@@ -185,6 +184,7 @@ export function HeadTableViewData() {
 
 export function BodyTableViewData({ rows }) {
   const [openModal, setOpenModal] = useState(false);
+  const [openModalDetail, setOpenModalDetail] = useState(false);
   const [form, setForm] = useState({
     tanggal: "",
     jam: "",
@@ -229,7 +229,10 @@ export function BodyTableViewData({ rows }) {
     }
   };
 
-  const handleCloseModal = () => setOpenModal(false);
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setOpenModalDetail(false);
+  };
 
   const handleDelete = async (id) => {
     if (!confirm("Yakin ingin menghapus data ini?")) return;
@@ -277,6 +280,27 @@ export function BodyTableViewData({ rows }) {
     setPage(0);
   };
 
+  const handleOpenModalDetail = (id) => {
+    const selectedData = rows.find((item) => item.id === id);
+    if (selectedData) {
+      setForm({
+        tanggal: selectedData.tanggal || "",
+        jam: selectedData.jam || "",
+        umur_hss: selectedData.umur_hss || "",
+        umur_tanaman: selectedData.umur_tanaman || "",
+        curah_hujan: selectedData.curah_hujan || "",
+        sifat_hujan: selectedData.sifat_hujan || "",
+        varietas: selectedData.varietas || "",
+        sumber_air: selectedData.sumber_air || "",
+        opt: selectedData.opt || "",
+        keterangan: selectedData.keterangan || "",
+        createdAt: selectedData.createdAt || "",
+        updatedAt: selectedData.updatedAt || "",
+      });
+      setOpenModalDetail(true);
+    }
+  };
+
   return (
     <>
       <TableBody>
@@ -285,7 +309,7 @@ export function BodyTableViewData({ rows }) {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((item, index) => (
               <TableRow key={index}>
-                <TableCell>
+                <TableCell sx={{ width: '20%'}}>
                   {item.tanggal
                     ? new Date(item.tanggal).toLocaleDateString("id-ID", {
                         year: "numeric",
@@ -301,6 +325,24 @@ export function BodyTableViewData({ rows }) {
                 <TableCell>{item.sifat_hujan || "-"}</TableCell>
                 <TableCell>{item.User?.nama || "-"}</TableCell>
                 <TableCell>
+                  <Button
+                    startIcon={
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        width="24"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        ,
+                        <path d="M12 6.5C7 6.5 2.73 9.61 1 12c1.73 2.39 6 5.5 11 5.5s9.27-3.11 11-5.5c-1.73-2.39-6-5.5-11-5.5zm0 9c-2.48 0-4.5-2.02-4.5-4.5S9.52 6.5 12 6.5s4.5 2.02 4.5 4.5S14.48 15.5 12 15.5zm0-7c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5S13.38 8.5 12 8.5z" />
+                      </svg>
+                    }
+                    sx={{ textTransform: "none" }}
+                    onClick={() => handleOpenModalDetail(item.id)}
+                  >
+                    Lihat
+                  </Button>
                   <Button
                     startIcon={<EditIcon />}
                     sx={{ textTransform: "none" }}
@@ -363,6 +405,92 @@ export function BodyTableViewData({ rows }) {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
           />
+        </Box>
+      </Modal>
+
+      <Modal open={openModalDetail} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 3,
+            borderRadius: 2,
+            width: "100%",
+            maxWidth: 800,
+            maxHeight: "80vh",
+            overflowY: "auto",
+          }}
+        >
+          <Typography variant="h6" component="h2" gutterBottom>
+            Detail Data Curah Hujan
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 5 }}>
+            <Typography>
+              <strong>Tanggal:</strong>{" "}
+              {form.tanggal
+                ? new Date(form.tanggal).toLocaleDateString("id-ID", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "-"}
+            </Typography>
+            <Typography>
+              <strong>Jam:</strong> {form.jam}
+            </Typography>
+            <Typography>
+              <strong>Umur HSS: </strong> {form.umur_hss || "-"}
+            </Typography>
+            <Typography>
+              <strong>Umur Tanaman: </strong> {form.umur_tanaman || "-"}
+            </Typography>
+            <Typography>
+              <strong>Curah Hujan: </strong> {form.curah_hujan || "-"}
+            </Typography>
+            <Typography>
+              <strong>Sifat Hujan: </strong> {form.sifat_hujan || "-"}
+            </Typography>
+            <Typography>
+              <strong>Varietas: </strong> {form.varietas || "-"}
+            </Typography>
+            <Typography>
+              <strong>Sumber Air: </strong>
+              {form.sumber_air || "-"}
+            </Typography>
+            <Typography>
+              <strong>OPT: </strong>
+              {form.opt || "-"}
+            </Typography>
+            <Typography>
+              <strong>Keterangan: </strong>
+              {form.keterangan || "-"}
+            </Typography>
+            <Typography>
+              <strong>Dibuat pada: </strong>{" "}
+              {form.createdAt
+                ? new Date(form.createdAt).toLocaleDateString("id-ID", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "-"}
+            </Typography>
+            <Typography>
+              <strong>Terakhir diupdate pada: </strong>{" "}
+              {form.updatedAt
+                ? new Date(form.updatedAt).toLocaleDateString("id-ID", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : "-"}
+            </Typography>
+          </Box>
+          <br />
         </Box>
       </Modal>
     </>

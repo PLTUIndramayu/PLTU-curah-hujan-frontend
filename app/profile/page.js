@@ -355,7 +355,7 @@ export default function ProfilePage() {
 
               <Grid size={6} item xs={12} md={6}>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  Tanggal Mulai Bekerja
+                  Tgl Mulai Bekerja
                 </Typography>
                 <TextField
                   type="date"
