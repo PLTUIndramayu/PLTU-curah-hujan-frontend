@@ -16,14 +16,14 @@ export default function ViewListUser() {
 
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Curah Hujan");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Daftar User");
 
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(data, `curah-hujan-${bulan}-${tahun}.xlsx`);
+    saveAs(data, `daftar-user.xlsx`);
   };
 
   const handlePrint = () => {
