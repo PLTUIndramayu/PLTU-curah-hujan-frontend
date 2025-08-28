@@ -7,13 +7,162 @@ import {
   Modal,
   Box,
   Table,
+  TextField,
   TablePagination,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useGetCurahHujanById, useUpdateCurahHujan } from "../api/curah-hujan";
+
+function FormInputData({ handleSubmit, form, handleChange }) {
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-md">
+      <h2 className="text-xl font-semibold mb-2">Input Data Curah Hujan</h2>
+      <p className="text-sm text-gray-600 mb-6">
+        Formulir pencatatan data harian curah hujan
+      </p>
+
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
+        <div className="flex flex-col gap-1">
+          <Typography>Hari/Tanggal</Typography>
+          <TextField
+            type="date"
+            name="tanggal"
+            className="p-2 border rounded"
+            value={form.tanggal}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography>Jam</Typography>
+          <TextField
+            type="time"
+            name="jam"
+            className="p-2 border rounded"
+            value={form.jam}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography>Umur HSS (Hari Setelah Semai)</Typography>
+          <TextField
+            type="number"
+            name="umur_hss"
+            className="p-2 border rounded"
+            value={form.umur_hss}
+            onChange={handleChange}
+            placeholder="Masukkan umur HSS"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography>Umur Tanaman (Hari Setelah Tanam)</Typography>
+          <TextField
+            type="number"
+            name="umur_tanaman"
+            className="p-2 border rounded"
+            value={form.umur_tanaman}
+            onChange={handleChange}
+            placeholder="Masukkan umur tanaman"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography>Curah Hujan (mm)</Typography>
+          <TextField
+            type="number"
+            name="curah_hujan"
+            className="p-2 border rounded"
+            value={form.curah_hujan}
+            onChange={handleChange}
+            placeholder="Masukkan curah hujan"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography>Sifat Hujan</Typography>
+          <TextField
+            type="text"
+            name="sifat_hujan"
+            className="p-2 border rounded bg-gray-100"
+            value={form.sifat_hujan}
+            readOnly
+            placeholder="Terisi otomatis"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography>Varietas</Typography>
+          <TextField
+            type="text"
+            name="varietas"
+            className="p-2 border rounded"
+            value={form.varietas}
+            onChange={handleChange}
+            placeholder="Masukkan varietas"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Typography>Sumber Air</Typography>
+          <TextField
+            type="text"
+            name="sumber_air"
+            className="p-2 border rounded"
+            value={form.sumber_air}
+            onChange={handleChange}
+            placeholder="Masukkan sumber air"
+          />
+        </div>
+
+        <div className="md:col-span-2 flex flex-col gap-1">
+          <Typography>OPT (Organisme Pengganggu Tanaman)</Typography>
+          <TextField
+            type="text"
+            name="opt"
+            className="p-2 border rounded"
+            value={form.opt}
+            onChange={handleChange}
+            placeholder="Masukkan OPT"
+          />
+        </div>
+
+        <div className="md:col-span-2 flex flex-col gap-1">
+          <Typography>Keterangan (opsional)</Typography>
+          <TextField
+            name="keterangan"
+            className="p-2 border rounded"
+            rows="3"
+            multiline
+            value={form.keterangan}
+            onChange={handleChange}
+            placeholder="Tambahkan keterangan jika diperlukan"
+          ></TextField>
+        </div>
+
+        <div className="md:col-span-2">
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3 }}
+            fullWidth
+            className="w-full  p-2 rounded"
+          >
+            Submit Data
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}
 
 export function HeadTableViewData() {
   return (
@@ -208,7 +357,13 @@ export function BodyTableViewData({ rows }) {
             maxHeight: "80vh",
             overflowY: "auto",
           }}
-        ></Box>
+        >
+          <FormInputData
+            form={form}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
+        </Box>
       </Modal>
     </>
   );
