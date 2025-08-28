@@ -16,6 +16,7 @@ import {
   Button,
   ToggleButtonGroup,
   ToggleButton,
+  useMediaQuery,
 } from "@mui/material";
 import {
   LineChart,
@@ -54,6 +55,7 @@ function ViewGrafikTahunan() {
   const [periode, setPeriode] = useState("Bulanan");
   const [bulan, setBulan] = useState(dayjs().format("MM"));
   const [tahun, setTahun] = useState(dayjs().format("YYYY"));
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   // === Filter Data Sesuai Periode ===
   const filteredData = useMemo(() => {
@@ -145,17 +147,20 @@ function ViewGrafikTahunan() {
   const handlePrint = () => {
     window.print();
   };
+
   return (
-    <Box p={5}>
+    <Box p={isMobile ? 2 : 5}>
       <Box
         sx={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: isMobile ? "flex-start" : "center",
+          gap: isMobile ? 2 : 0,
         }}
       >
         <Box>
-          <Typography variant="h5" fontWeight="bold">
+          <Typography variant={isMobile ? "h6" : "h5"} fontWeight="bold">
             Grafik Curah Hujan
           </Typography>
           <Typography variant="body2" color="text.secondary" mb={2}>
@@ -163,18 +168,19 @@ function ViewGrafikTahunan() {
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
           <Button
             variant="contained"
             startIcon={<DownloadIcon />}
             onClick={handleExport}
-            className="!bg-green-600 hover:!bg-green-600 !normal-case rounded-lg shadow-md px-6 py-2"
+            className="!bg-green-600 hover:!bg-green-600 !normal-case rounded-lg shadow-md"
             sx={{
               textTransform: "none",
               borderRadius: 2,
               boxShadow: 2,
-              px: 3,
+              px: isMobile ? 2 : 3,
               py: 1,
+              fontSize: isMobile ? "0.75rem" : "0.9rem",
             }}
           >
             Ekspor
@@ -184,13 +190,14 @@ function ViewGrafikTahunan() {
             variant="contained"
             startIcon={<PrintIcon />}
             onClick={handlePrint}
-            className="!bg-blue-500 hover:!bg-blue-600 !normal-case rounded-lg shadow-md px-6 py-2 ml-5"
+            className="!bg-blue-500 hover:!bg-blue-600 !normal-case rounded-lg shadow-md"
             sx={{
               textTransform: "none",
               borderRadius: 2,
               boxShadow: 2,
-              px: 3,
+              px: isMobile ? 2 : 3,
               py: 1,
+              fontSize: isMobile ? "0.75rem" : "0.9rem",
             }}
           >
             Cetak
@@ -206,6 +213,7 @@ function ViewGrafikTahunan() {
             exclusive
             onChange={(e, val) => val && setPeriode(val)}
             sx={{ mb: 2, flexWrap: "wrap" }}
+            size={isMobile ? "small" : "medium"}
           >
             <ToggleButton value="Bulanan">Bulanan</ToggleButton>
             <ToggleButton value="Dasarian">Dasarian</ToggleButton>
@@ -214,7 +222,7 @@ function ViewGrafikTahunan() {
 
           {/* Filter */}
           <Box display="flex" gap={2} mb={2} mt={2} flexWrap="wrap">
-            <FormControl size="small" sx={{ minWidth: 120 }}>
+            <FormControl size="small" sx={{ minWidth: isMobile ? 100 : 120 }}>
               <Select value={tahun} onChange={(e) => setTahun(e.target.value)}>
                 {[2025].map((y) => (
                   <MenuItem key={y} value={String(y)}>
@@ -225,7 +233,10 @@ function ViewGrafikTahunan() {
             </FormControl>
 
             {periode !== "Tahunan" && (
-              <FormControl size="small" sx={{ minWidth: 120 }}>
+              <FormControl
+                size="small"
+                sx={{ minWidth: isMobile ? 100 : 120 }}
+              >
                 <Select
                   value={bulan}
                   onChange={(e) => setBulan(e.target.value)}
@@ -244,14 +255,14 @@ function ViewGrafikTahunan() {
           </Box>
 
           {/* Grafik Line Responsive */}
-          <Box sx={{ width: "100%", height: 300 }}>
+          <Box sx={{ width: "100%", height: isMobile ? 250 : 300 }}>
             <ResponsiveContainer>
               <LineChart data={lineData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
+                {!isMobile && <Legend />}
                 <Line type="monotone" dataKey="curah_hujan" stroke="#1976d2" />
               </LineChart>
             </ResponsiveContainer>

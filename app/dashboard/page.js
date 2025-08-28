@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, Button } from "@mui/material";
+import { Card, CardContent, Button, useMediaQuery } from "@mui/material";
 import { BarChart3, FilePlus2, LayoutDashboard } from "lucide-react";
 import { Header } from "../component/header";
 import { useCurahHujanAllData } from "../api/curah-hujan";
@@ -9,6 +9,7 @@ import ProtectedRoute from "../component/ProtectedRoute";
 
 export default function DashboardPage() {
   const rows = useCurahHujanAllData();
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const totalStasiun = new Set(rows?.map((r) => r.User?.kode_stasiun)).size;
 
@@ -33,25 +34,39 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className="p-4 sm:p-6 space-y-6">
+      <div className={`p-4 ${isMobile ? "space-y-4" : "sm:p-6 space-y-6"}`}>
         <Header />
-        <p className="pl-2 sm:pl-5 pt-5 text-muted-foreground text-sm sm:text-base">
+        <p
+          className={`pt-4 ${
+            isMobile ? "pl-1 text-sm" : "pl-5 text-base"
+          } text-muted-foreground`}
+        >
           Selamat datang di Sistem Monitoring Curah Hujan. Silakan pilih opsi di
           bawah ini.
         </p>
 
         {/* Main Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mt-6 p-2 sm:p-4">
+        <div
+          className={`grid gap-4 ${
+            isMobile ? "grid-cols-1" : "md:grid-cols-3 sm:gap-6 mt-6 p-2 sm:p-4"
+          }`}
+        >
+          {/* Input Data */}
           <Card className="text-center" sx={{ borderRadius: "12px" }}>
             <CardContent className="p-4 sm:p-6">
               <FilePlus2 className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-blue-500" />
-              <h2 className="mt-3 sm:mt-4 text-base sm:text-lg font-semibold">Input Data</h2>
+              <h2 className="mt-3 sm:mt-4 text-base sm:text-lg font-semibold">
+                Input Data
+              </h2>
               <p className="text-xs sm:text-sm text-muted-foreground">
                 Masukkan data curah hujan baru ke sistem.
               </p>
               <Button
                 variant="contained"
-                sx={{ mt: 2, fontSize: { xs: "0.8rem", sm: "1rem" } }}
+                sx={{
+                  mt: 2,
+                  fontSize: isMobile ? "0.8rem" : "1rem",
+                }}
                 fullWidth
                 onClick={() => (window.location.href = "/input-data")}
               >
@@ -60,6 +75,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
+          {/* View Data */}
           <Card className="text-center" sx={{ borderRadius: "12px" }}>
             <CardContent className="p-4 sm:p-6">
               <LayoutDashboard className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-blue-500" />
@@ -71,7 +87,7 @@ export default function DashboardPage() {
               </p>
               <Button
                 variant="contained"
-                sx={{ mt: 2, fontSize: { xs: "0.8rem", sm: "1rem" } }}
+                sx={{ mt: 2, fontSize: isMobile ? "0.8rem" : "1rem" }}
                 fullWidth
                 onClick={() => (window.location.href = "/view-data")}
               >
@@ -80,6 +96,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
+          {/* View Grafik */}
           <Card className="text-center" sx={{ borderRadius: "12px" }}>
             <CardContent className="p-4 sm:p-6">
               <BarChart3 className="mx-auto h-8 w-8 sm:h-10 sm:w-10 text-blue-500" />
@@ -91,7 +108,7 @@ export default function DashboardPage() {
               </p>
               <Button
                 variant="contained"
-                sx={{ mt: 2, fontSize: { xs: "0.8rem", sm: "1rem" } }}
+                sx={{ mt: 2, fontSize: isMobile ? "0.8rem" : "1rem" }}
                 fullWidth
                 onClick={() => (window.location.href = "/view-grafik")}
               >
@@ -103,30 +120,48 @@ export default function DashboardPage() {
 
         {/* Summary Section */}
         <div className="bg-muted p-4 sm:p-6 rounded-xl">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-            <h2 className="text-base sm:text-lg font-semibold">Ringkasan Data Terkini</h2>
+          <div
+            className={`flex ${
+              isMobile
+                ? "flex-col gap-2 items-start"
+                : "flex-row justify-between items-center mb-4"
+            }`}
+          >
+            <h2 className="text-base sm:text-lg font-semibold">
+              Ringkasan Data Terkini
+            </h2>
             <span className="text-xs sm:text-sm text-muted-foreground">
               Diperbarui: {updatedAt}
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 pt-2 sm:pt-4">
+          <div
+            className={`grid gap-2 sm:gap-4 pt-2 sm:pt-4 ${
+              isMobile ? "grid-cols-1" : "sm:grid-cols-3"
+            }`}
+          >
             <div className="border border-gray-200 pl-4 sm:pl-8 rounded-xl">
               <p className="text-xs sm:text-sm text-muted-foreground pt-2 sm:pt-4">
                 Total Stasiun
               </p>
-              <div className="text-lg sm:text-xl font-bold py-2 sm:py-3">{totalStasiun}</div>
+              <div className="text-lg sm:text-xl font-bold py-2 sm:py-3">
+                {totalStasiun}
+              </div>
             </div>
             <div className="border border-gray-200 pl-4 sm:pl-8 rounded-xl">
               <p className="text-xs sm:text-sm text-muted-foreground pt-2 sm:pt-4">
                 Data Bulan Ini
               </p>
-              <div className="text-lg sm:text-xl font-bold pt-2 sm:pt-3">{bulanIni}</div>
+              <div className="text-lg sm:text-xl font-bold pt-2 sm:pt-3">
+                {bulanIni}
+              </div>
             </div>
             <div className="border border-gray-200 pl-4 sm:pl-8 rounded-xl">
               <p className="text-xs sm:text-sm text-muted-foreground pt-2 sm:pt-4">
                 Curah Hujan Tertinggi
               </p>
-              <div className="text-lg sm:text-xl font-bold pt-2 sm:pt-3">{curahMax} mm</div>
+              <div className="text-lg sm:text-xl font-bold pt-2 sm:pt-3">
+                {curahMax} mm
+              </div>
             </div>
           </div>
         </div>
