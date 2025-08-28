@@ -10,6 +10,7 @@ import {
   TextField,
   TablePagination,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -17,145 +18,72 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useGetCurahHujanById, useUpdateCurahHujan } from "../api/curah-hujan";
 
-function FormInputData({ handleSubmit, form, handleChange }) {
+function FormInputData({ handleSubmit, form, handleChange, isMobile }) {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md">
-      <h2 className="text-xl font-semibold mb-2">Input Data Curah Hujan</h2>
-      <p className="text-sm text-gray-600 mb-6">
+    <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+      <h2 className={`font-semibold mb-2 ${isMobile ? "text-base" : "text-xl"}`}>
+        Input Data Curah Hujan
+      </h2>
+      <p className={`mb-6 text-gray-600 ${isMobile ? "text-xs" : "text-sm"}`}>
         Formulir pencatatan data harian curah hujan
       </p>
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        className={`grid gap-4 sm:gap-6 ${isMobile ? "grid-cols-1" : "grid-cols-2"}`}
       >
         <div className="flex flex-col gap-1">
-          <Typography>Hari/Tanggal</Typography>
-          <TextField
-            type="date"
-            name="tanggal"
-            className="p-2 border rounded"
-            value={form.tanggal}
-            onChange={handleChange}
-          />
+          <Typography variant="body2">Hari/Tanggal</Typography>
+          <TextField fullWidth type="date" name="tanggal" value={form.tanggal} onChange={handleChange} />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Typography>Jam</Typography>
-          <TextField
-            type="time"
-            name="jam"
-            className="p-2 border rounded"
-            value={form.jam}
-            onChange={handleChange}
-          />
+          <Typography variant="body2">Jam</Typography>
+          <TextField fullWidth type="time" name="jam" value={form.jam} onChange={handleChange} />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Typography>Umur HSS (Hari Setelah Semai)</Typography>
-          <TextField
-            type="number"
-            name="umur_hss"
-            className="p-2 border rounded"
-            value={form.umur_hss}
-            onChange={handleChange}
-            placeholder="Masukkan umur HSS"
-          />
+          <Typography variant="body2">Umur HSS</Typography>
+          <TextField fullWidth type="number" name="umur_hss" value={form.umur_hss} onChange={handleChange} placeholder="Masukkan umur HSS" />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Typography>Umur Tanaman (Hari Setelah Tanam)</Typography>
-          <TextField
-            type="number"
-            name="umur_tanaman"
-            className="p-2 border rounded"
-            value={form.umur_tanaman}
-            onChange={handleChange}
-            placeholder="Masukkan umur tanaman"
-          />
+          <Typography variant="body2">Umur Tanaman</Typography>
+          <TextField fullWidth type="number" name="umur_tanaman" value={form.umur_tanaman} onChange={handleChange} placeholder="Masukkan umur tanaman" />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Typography>Curah Hujan (mm)</Typography>
-          <TextField
-            type="number"
-            name="curah_hujan"
-            className="p-2 border rounded"
-            value={form.curah_hujan}
-            onChange={handleChange}
-            placeholder="Masukkan curah hujan"
-          />
+          <Typography variant="body2">Curah Hujan (mm)</Typography>
+          <TextField fullWidth type="number" name="curah_hujan" value={form.curah_hujan} onChange={handleChange} placeholder="Masukkan curah hujan" />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Typography>Sifat Hujan</Typography>
-          <TextField
-            type="text"
-            name="sifat_hujan"
-            className="p-2 border rounded bg-gray-100"
-            value={form.sifat_hujan}
-            readOnly
-            placeholder="Terisi otomatis"
-          />
+          <Typography variant="body2">Sifat Hujan</Typography>
+          <TextField fullWidth type="text" name="sifat_hujan" value={form.sifat_hujan} readOnly placeholder="Terisi otomatis" />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Typography>Varietas</Typography>
-          <TextField
-            type="text"
-            name="varietas"
-            className="p-2 border rounded"
-            value={form.varietas}
-            onChange={handleChange}
-            placeholder="Masukkan varietas"
-          />
+          <Typography variant="body2">Varietas</Typography>
+          <TextField fullWidth type="text" name="varietas" value={form.varietas} onChange={handleChange} placeholder="Masukkan varietas" />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Typography>Sumber Air</Typography>
-          <TextField
-            type="text"
-            name="sumber_air"
-            className="p-2 border rounded"
-            value={form.sumber_air}
-            onChange={handleChange}
-            placeholder="Masukkan sumber air"
-          />
+          <Typography variant="body2">Sumber Air</Typography>
+          <TextField fullWidth type="text" name="sumber_air" value={form.sumber_air} onChange={handleChange} placeholder="Masukkan sumber air" />
         </div>
 
-        <div className="md:col-span-2 flex flex-col gap-1">
-          <Typography>OPT (Organisme Pengganggu Tanaman)</Typography>
-          <TextField
-            type="text"
-            name="opt"
-            className="p-2 border rounded"
-            value={form.opt}
-            onChange={handleChange}
-            placeholder="Masukkan OPT"
-          />
+        <div className={`${isMobile ? "col-span-1" : "col-span-2"} flex flex-col gap-1`}>
+          <Typography variant="body2">OPT</Typography>
+          <TextField fullWidth type="text" name="opt" value={form.opt} onChange={handleChange} placeholder="Masukkan OPT" />
         </div>
 
-        <div className="md:col-span-2 flex flex-col gap-1">
-          <Typography>Keterangan (opsional)</Typography>
-          <TextField
-            name="keterangan"
-            className="p-2 border rounded"
-            rows="3"
-            multiline
-            value={form.keterangan}
-            onChange={handleChange}
-            placeholder="Tambahkan keterangan jika diperlukan"
-          ></TextField>
+        <div className={`${isMobile ? "col-span-1" : "col-span-2"} flex flex-col gap-1`}>
+          <Typography variant="body2">Keterangan</Typography>
+          <TextField fullWidth name="keterangan" rows={3} multiline value={form.keterangan} onChange={handleChange} placeholder="Tambahkan keterangan" />
         </div>
 
-        <div className="md:col-span-2">
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ mt: 3 }}
-            fullWidth
-            className="w-full  p-2 rounded"
-          >
+        <div className={`${isMobile ? "col-span-1" : "col-span-2"}`}>
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Submit Data
           </Button>
         </div>
@@ -183,6 +111,7 @@ export function HeadTableViewData() {
 }
 
 export function BodyTableViewData({ rows }) {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const [openModal, setOpenModal] = useState(false);
   const [openModalDetail, setOpenModalDetail] = useState(false);
   const [form, setForm] = useState({
@@ -404,6 +333,7 @@ export function BodyTableViewData({ rows }) {
             form={form}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
+            isMobile={isMobile}
           />
         </Box>
       </Modal>

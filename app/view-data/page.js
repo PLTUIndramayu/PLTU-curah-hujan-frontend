@@ -28,6 +28,7 @@ import {
   MenuItem,
   Grid,
   useMediaQuery,
+  Box,
 } from "@mui/material";
 import { BodyTableViewData, HeadTableViewData } from "./helper";
 import { useCurahHujanByMonth } from "../api/curah-hujan";
@@ -51,12 +52,16 @@ function RekapBulanan() {
     );
   }
 
-  const totalCurah = data.reduce((sum, item) => sum + (item.curah_hujan || 0), 0);
+  const totalCurah = data.reduce(
+    (sum, item) => sum + (item.curah_hujan || 0),
+    0
+  );
   const jumlahHariHujan = data.filter((item) => item.curah_hujan > 0).length;
   const tertinggi = data.reduce((max, item) =>
     item.curah_hujan > max.curah_hujan ? item : max
   );
-  const terendah = data.filter((item) => item.curah_hujan > 0)
+  const terendah = data
+    .filter((item) => item.curah_hujan > 0)
     .reduce((min, item) => (item.curah_hujan < min.curah_hujan ? item : min));
 
   return (
@@ -65,8 +70,12 @@ function RekapBulanan() {
         Rekap Bulanan - {namaBulan[bulan - 1]} {tahun}
       </h3>
       <div className="text-sm space-y-2 mt-4">
-        <p>Total Curah Hujan: <strong>{totalCurah.toFixed(1)} mm</strong></p>
-        <p>Jumlah Hari Hujan: <strong>{jumlahHariHujan} hari</strong></p>
+        <p>
+          Total Curah Hujan: <strong>{totalCurah.toFixed(1)} mm</strong>
+        </p>
+        <p>
+          Jumlah Hari Hujan: <strong>{jumlahHariHujan} hari</strong>
+        </p>
         <p>
           Curah Hujan Tertinggi:{" "}
           <strong>
@@ -135,7 +144,11 @@ function RekapDasarian({ bulan, tahun }) {
   const rekapDasarian = [
     { periode: `1 - 10 ${namaBulanTerpilih}`, total_curah: 0, hari_hujan: 0 },
     { periode: `11 - 20 ${namaBulanTerpilih}`, total_curah: 0, hari_hujan: 0 },
-    { periode: `21 - akhir ${namaBulanTerpilih}`, total_curah: 0, hari_hujan: 0 },
+    {
+      periode: `21 - akhir ${namaBulanTerpilih}`,
+      total_curah: 0,
+      hari_hujan: 0,
+    },
   ];
 
   data.forEach((item) => {
@@ -155,7 +168,7 @@ function RekapDasarian({ bulan, tahun }) {
   return (
     <div className="overflow-x-auto">
       <h3 className="font-semibold mb-2">Rekap Dasarian</h3>
-      <Table size="small">
+      <Table size="medium">
         <TableHead>
           <TableRow>
             <TableCell>Periode</TableCell>
@@ -182,7 +195,9 @@ export default function ViewData() {
   const isMobile = useMediaQuery("(max-width:600px)");
 
   const [tahun, setTahun] = useState(today.getFullYear());
-  const [bulan, setBulan] = useState(String(today.getMonth() + 1).padStart(2, "0"));
+  const [bulan, setBulan] = useState(
+    String(today.getMonth() + 1).padStart(2, "0")
+  );
   const rows = useCurahHujanByMonth(bulan, tahun);
 
   const handleExport = () => {
@@ -190,7 +205,10 @@ export default function ViewData() {
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Curah Hujan");
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
     saveAs(new Blob([excelBuffer]), `curah-hujan-${bulan}-${tahun}.xlsx`);
   };
 
@@ -205,34 +223,54 @@ export default function ViewData() {
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-            <h1 className="text-lg sm:text-xl font-bold">Data Curah Hujan Bulanan</h1>
-            <div className={`flex ${isMobile ? "flex-col w-full" : "flex-row"} gap-2`}>
+            <h1 className="text-lg sm:text-xl font-bold">
+              Data Curah Hujan Bulanan
+            </h1>
+            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
               <Button
-                fullWidth={isMobile}
                 variant="contained"
                 startIcon={<DownloadIcon />}
                 onClick={handleExport}
-                className="!bg-green-600 hover:!bg-green-700 !normal-case rounded-lg"
+                className="!bg-green-600 hover:!bg-green-600 !normal-case rounded-lg shadow-md"
+                sx={{
+                  textTransform: "none",
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  px: isMobile ? 2 : 3,
+                  py: 1,
+                  fontSize: isMobile ? "0.75rem" : "0.9rem",
+                }}
               >
                 Ekspor
               </Button>
+
               <Button
-                fullWidth={isMobile}
                 variant="contained"
                 startIcon={<PrintIcon />}
                 onClick={handlePrint}
-                className="!bg-blue-500 hover:!bg-blue-600 !normal-case rounded-lg"
+                className="!bg-blue-500 hover:!bg-blue-600 !normal-case rounded-lg shadow-md"
+                sx={{
+                  textTransform: "none",
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  px: isMobile ? 2 : 3,
+                  py: 1,
+                  fontSize: isMobile ? "0.75rem" : "0.9rem",
+                }}
               >
                 Cetak
               </Button>
-            </div>
+            </Box>
           </div>
 
           {/* Filter */}
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth size="small">
-                <Select value={tahun} onChange={(e) => setTahun(e.target.value)}>
+                <Select
+                  value={tahun}
+                  onChange={(e) => setTahun(e.target.value)}
+                >
                   <MenuItem value="2023">2023</MenuItem>
                   <MenuItem value="2024">2024</MenuItem>
                   <MenuItem value="2025">2025</MenuItem>
@@ -241,9 +279,14 @@ export default function ViewData() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth size="small">
-                <Select value={bulan} onChange={(e) => setBulan(e.target.value)}>
+                <Select
+                  value={bulan}
+                  onChange={(e) => setBulan(e.target.value)}
+                >
                   {namaBulan.map((b, i) => (
-                    <MenuItem key={i} value={String(i + 1).padStart(2, "0")}>{b}</MenuItem>
+                    <MenuItem key={i} value={String(i + 1).padStart(2, "0")}>
+                      {b}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -262,7 +305,11 @@ export default function ViewData() {
           </div>
 
           {/* Grafik & Dasarian */}
-          <div className={`grid ${isMobile ? "grid-cols-1" : "md:grid-cols-2"} gap-4`}>
+          <div
+            className={`grid ${
+              isMobile ? "grid-cols-1" : "md:grid-cols-2"
+            } gap-4`}
+          >
             <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
               <RekapDasarian bulan={bulan} tahun={tahun} />
             </div>
@@ -273,7 +320,10 @@ export default function ViewData() {
                   <XAxis
                     dataKey="tanggal"
                     tickFormatter={(date) =>
-                      new Date(date).toLocaleDateString("id-ID", { day: "2-digit", month: "short" })
+                      new Date(date).toLocaleDateString("id-ID", {
+                        day: "2-digit",
+                        month: "short",
+                      })
                     }
                   />
                   <YAxis />
@@ -285,7 +335,11 @@ export default function ViewData() {
           </div>
 
           {/* Statistik */}
-          <div className={`grid ${isMobile ? "grid-cols-1" : "md:grid-cols-2"} gap-4`}>
+          <div
+            className={`grid ${
+              isMobile ? "grid-cols-1" : "md:grid-cols-2"
+            } gap-4`}
+          >
             <RekapBulanan />
             <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
               <h3 className="font-semibold mb-2">Statistik Sifat Hujan</h3>
