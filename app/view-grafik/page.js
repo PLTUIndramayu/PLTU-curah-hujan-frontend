@@ -17,6 +17,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   LineChart,
@@ -34,6 +35,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import dayjs from "dayjs";
+import "dayjs/locale/id";
+dayjs.locale("id");
+
 import { useCurahHujanAllData } from "../api/curah-hujan";
 import { Header } from "../component/header";
 import { colors } from "../utils";
@@ -222,21 +226,22 @@ function ViewGrafikTahunan() {
 
           {/* Filter */}
           <Box display="flex" gap={2} mb={2} mt={2} flexWrap="wrap">
+            {/* Dropdown Tahun */}
             <FormControl size="small" sx={{ minWidth: isMobile ? 100 : 120 }}>
               <Select value={tahun} onChange={(e) => setTahun(e.target.value)}>
-                {[2025].map((y) => (
-                  <MenuItem key={y} value={String(y)}>
-                    {y}
-                  </MenuItem>
-                ))}
+                {Array.from({ length: 3 }, (_, i) => dayjs().year() + i).map(
+                  (y) => (
+                    <MenuItem key={y} value={String(y)}>
+                      {y}
+                    </MenuItem>
+                  )
+                )}
               </Select>
             </FormControl>
 
+            {/* Dropdown Bulan */}
             {periode !== "Tahunan" && (
-              <FormControl
-                size="small"
-                sx={{ minWidth: isMobile ? 100 : 120 }}
-              >
+              <FormControl size="small" sx={{ minWidth: isMobile ? 100 : 120 }}>
                 <Select
                   value={bulan}
                   onChange={(e) => setBulan(e.target.value)}
@@ -246,7 +251,7 @@ function ViewGrafikTahunan() {
                       key={i + 1}
                       value={String(i + 1).padStart(2, "0")}
                     >
-                      {dayjs(`2025-${i + 1}-01`).format("MMMM")}
+                      {dayjs(`${tahun}-${i + 1}-01`).format("MMMM")}
                     </MenuItem>
                   ))}
                 </Select>
@@ -287,6 +292,9 @@ function ViewGrafikTahunan() {
 function ViewChart() {
   const rows = useCurahHujanAllData();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const lineData = useMemo(() => {
     const grouped = {};
     rows.forEach((item) => {
@@ -319,15 +327,15 @@ function ViewChart() {
   );
 
   return (
-    <Box pl={5} pr={5} pb={5}>
-      {/* Statistik */}
-      <Box display="flex" gap={2} flexWrap="wrap">
+    <Box pl={isMobile ? 2 : 5} pr={isMobile ? 2 : 5} pb={5}>
+      <Box display="flex" gap={2} flexDirection={isMobile ? "column" : "row"}>
+        {/* Statistik Bulanan */}
         <Card sx={{ flex: 1 }}>
-          <CardContent sx={{ justifyItems: "center" }}>
+          <CardContent>
             <Typography variant="subtitle1" fontWeight="bold">
               Statistik Bulanan
             </Typography>
-            <Box sx={{ width: "100%", height: 250 }}>
+            <Box sx={{ width: "100%", height: isMobile ? 200 : 250 }}>
               <ResponsiveContainer>
                 <BarChart data={lineData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -359,14 +367,15 @@ function ViewChart() {
           </CardContent>
         </Card>
 
+        {/* Distribusi Curah Hujan */}
         <Card sx={{ flex: 1 }}>
-          <CardContent sx={{ justifyItems: "center" }}>
+          <CardContent>
             <Typography variant="subtitle1" fontWeight="bold">
               Distribusi Curah Hujan
             </Typography>
 
             {pieData.length > 0 ? (
-              <Box sx={{ width: "100%", height: 300 }}>
+              <Box sx={{ width: "100%", height: isMobile ? 220 : 300 }}>
                 <ResponsiveContainer>
                   <PieChart>
                     <Pie
@@ -374,7 +383,7 @@ function ViewChart() {
                       data={pieData}
                       cx="50%"
                       cy="50%"
-                      outerRadius="80%"
+                      outerRadius={isMobile ? "70%" : "80%"}
                       label={(entry) =>
                         `${entry.name || "Tidak ada"}: ${entry.value}`
                       }
@@ -390,7 +399,7 @@ function ViewChart() {
               </Box>
             ) : (
               <Typography variant="body2" color="text.secondary">
-                Tidak ada data untuk ditampilkan
+                Data tidak tersedia
               </Typography>
             )}
           </CardContent>

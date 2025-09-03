@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Web App",
+  title: "PLTU Web App",
   description: "App",
 };
 

@@ -24,6 +24,7 @@ import {
   ListItemIcon,
   ListItemText,
   useMediaQuery,
+  Tooltip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
@@ -187,15 +188,20 @@ export function Header() {
         </>
       ) : (
         <div className="flex gap-2">
-          <Link href="https://www.whatsapp.com" passHref>
-            <Button
-              variant="outlined"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2"
-            >
-              <HelpCircle className="w-4 h-4" /> Bantuan
-            </Button>
+          <Link
+            href="https://api.whatsapp.com/send/?phone=%2B6285602950075&text&type=phone_number&app_absent=0"
+            passHref
+          >
+            <Tooltip title="Klik untuk bantuan ke WhatsApp">
+              <Button
+                variant="outlined"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <HelpCircle className="w-4 h-4" /> Bantuan
+              </Button>
+            </Tooltip>
           </Link>
           <Button variant="outlined" onClick={handleMenuOpen}>
             Profil

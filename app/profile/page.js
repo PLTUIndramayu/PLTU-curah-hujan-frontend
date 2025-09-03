@@ -14,6 +14,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useProfile } from "../api/user";
@@ -22,6 +24,8 @@ import { Header } from "../component/header";
 export default function ProfilePage() {
   const router = useRouter();
   const rows = useProfile();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [form, setForm] = useState({
     kode_user: "",
     jabatan: "",
@@ -169,14 +173,16 @@ export default function ProfilePage() {
   };
 
   return (
-    <Box>
+    <Box sx={{ p: isMobile ? 1 : 3 }}>
       <div className="p-6 space-y-6">
         <Header />
         <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
           <Box
             display="flex"
+            flexDirection={isMobile ? "column" : "row"}
             justifyContent="space-between"
-            alignItems="center"
+            alignItems={isMobile ? "flex-start" : "center"}
+            gap={isMobile ? 2 : 0}
           >
             <Typography variant="h6" fontWeight="bold">
               Profil Pengguna
@@ -398,7 +404,7 @@ export default function ProfilePage() {
           </Box>
 
           {/* Pengaturan Akun */}
-          <Box p={3}>
+          <Box sx={{ p: isMobile ? 1 : 3 }}>
             <Typography variant="subtitle1" fontWeight="bold">
               Pengaturan Akun
             </Typography>

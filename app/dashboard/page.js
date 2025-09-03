@@ -1,7 +1,16 @@
 "use client";
 
-import { Card, CardContent, Button, useMediaQuery } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Button,
+  useMediaQuery,
+  Fab,
+  Zoom,
+  Tooltip,
+} from "@mui/material";
 import { BarChart3, FilePlus2, LayoutDashboard } from "lucide-react";
+import {Footer} from "../component/footer"
 import { Header } from "../component/header";
 import { useCurahHujanAllData } from "../api/curah-hujan";
 import dayjs from "dayjs";
@@ -165,7 +174,30 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Floating Action Button */}
+        <Zoom in={true}>
+          <Tooltip title="Input Data">
+            <Fab
+              color="primary"
+              aria-label="add"
+              sx={{
+                position: "fixed",
+                bottom: 24,
+                right: 24,
+                zIndex: 999,
+              }}
+              onClick={() => (window.location.href = "/input-data")}
+            >
+              <FilePlus2 size={20} />
+            </Fab>
+          </Tooltip>
+        </Zoom>
+      
+      <Footer />
       </div>
+
+
     </ProtectedRoute>
   );
 }

@@ -1,0 +1,1308 @@
+{
+	"info": {
+		"_postman_id": "20380150-ef77-4f71-bd68-624db6fc043e",
+		"name": "API Documentation",
+		"description": "# About this collection\n\nThis collection helps you set up contract tests to ensure that two separate systems are compatible and can communicate with one another.\n\n## **Using the collection**\n\n**Step 1:** Send the sample requests and view the response and test results.\n\n**Step 2:** Replace the sample request URLs with your desired API endpoints.\n\n**Step 3:** Customize the tests in the \"Tests\" tab if needed. Don't forget to save your changes.\n\n### Resources\n\n[Scripting in Postman](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/)\n\n[Test script examples](https://learning.postman.com/docs/writing-scripts/script-references/test-examples/)\n\n[Postman Sandbox API reference](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#writing-assertions)\n\n[Using the Collection Runner](https://learning.postman.com/docs/collections/running-collections/intro-to-collection-runs/)\n\n[  \n](https://postman.postman.co/documentation/24552533-5bead607-0197-4e1d-87d4-3160bc7631c1?entity=&branch=&version=)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "46889476"
+	},
+	"item": [
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/auth/login",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": [
+				{
+					"name": "Login User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3001/auth/login"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "196"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"c4-rQYxJz/jqg1GVTVJZRK49RwZvpg\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 03 Aug 2025 13:25:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Login berhasil\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MjI3NTM3LCJleHAiOjE3NTQzMTM5Mzd9.mW-I4kvsSplUM5BSRABFglpw0lm6t_XYfJ2uUs6c1Xs\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Register User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFlYzlkZjU2LWRlZTctNDNjNS1iMGYyLTA2MWIzZTZjZGYyMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTg1NjQ2OCwiZXhwIjoxNzU1OTQyODY4fQ.d--xQkmTO5lcYhc-GjEWJwInbQSwOmEMPDYt8mKHcZc"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nama\": \"dev\",\n  \"email\": \"admin1@example.com\",\n  \"password\": \"admin123\",\n  \"role\": \"admin\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/auth/register",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": [
+				{
+					"name": "example",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"dev\",\n  \"email\": \"admin1@example.com\",\n  \"password\": \"admin123\",\n  \"role\": \"admin\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3001/auth/register"
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "439"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1b7-Gwypfah/+R8QUe19HRN11c9CmH0\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 07 Aug 2025 13:57:22 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"User berhasil dibuat\",\n    \"user\": {\n        \"id\": \"150738b6-2991-4bfa-b003-1cba3a69fda1\",\n        \"nama\": \"dev\",\n        \"email\": \"admin1@example.com\",\n        \"password\": \"$2b$10$My5pIlU9nsfWsJwvHpNsi.O3.0MY5WkPBaaaWcPb8zP34k/9aIhQO\",\n        \"role\": \"admin\",\n        \"kode_user\": \"USR-46JE1QDY\",\n        \"updatedAt\": \"2025-08-07T13:57:22.372Z\",\n        \"createdAt\": \"2025-08-07T13:57:22.372Z\",\n        \"tanggal_lahir\": null,\n        \"alamat\": null,\n        \"nomor_telepon\": null,\n        \"jabatan\": null,\n        \"kode_stasiun\": null,\n        \"tgl_mulai_bekerja\": null\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "foto_profil",
+							"type": "file",
+							"src": "/Users/putriii/Pictures/💋💋💋.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3001/auth/update-profile/3045e172-2687-4abb-968f-3e40353bcf68",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"auth",
+						"update-profile",
+						"3045e172-2687-4abb-968f-3e40353bcf68"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "150738b6-2991-4bfa-b003-1cba3a69fda1",
+							"disabled": true
+						}
+					]
+				},
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": [
+				{
+					"name": "Update Profile",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "foto_profil",
+									"type": "file",
+									"src": "/Users/putriii/Pictures/💋💋💋.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3001/auth/update-profile/3045e172-2687-4abb-968f-3e40353bcf68",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"auth",
+								"update-profile",
+								"3045e172-2687-4abb-968f-3e40353bcf68"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "150738b6-2991-4bfa-b003-1cba3a69fda1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "520"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"208-eLTH3COY7Ek80S/6I+ZG+aaL5gI\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 22 Aug 2025 10:18:33 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Profil berhasil diperbarui\",\n    \"data\": {\n        \"id\": \"3045e172-2687-4abb-968f-3e40353bcf68\",\n        \"nama\": \"dev\",\n        \"email\": \"admin1@example.com\",\n        \"foto_profil\": \"http://localhost:3001/uploads/1755857913117-745609829.jpeg\",\n        \"tanggal_lahir\": null,\n        \"alamat\": null,\n        \"nomor_telepon\": null,\n        \"password\": \"$2b$10$ruzmCusNlaHqsJn6yU6fc.m42kQcAWgY4Fy.a4oQ7YYGr9nWtPbKO\",\n        \"role\": \"admin\",\n        \"jabatan\": null,\n        \"kode_user\": \"USR-7LEWQINI\",\n        \"kode_stasiun\": null,\n        \"tgl_mulai_bekerja\": null,\n        \"createdAt\": \"2025-08-22T10:01:10.645Z\",\n        \"updatedAt\": \"2025-08-22T10:18:33.152Z\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"password\": \"admin123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/auth/login",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyODkzMzY4LCJleHAiOjE3NTI5Nzk3Njh9.sHdJXJllEqDIQXbCHCWB2H3eZrUHTrhimfiduWHbHuk"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/admin-panel",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwNDVlMTcyLTI2ODctNGFiYi05NjhmLTNlNDAzNTNiY2Y2OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTg1Njk1MywiZXhwIjoxNzU1OTQzMzUzfQ.AfpXRiVH87XiP0yQlDvwWoZKIA_NZGjz0b2RY9v7-5g"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/auth/profile",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwNDVlMTcyLTI2ODctNGFiYi05NjhmLTNlNDAzNTNiY2Y2OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTg1Njk1MywiZXhwIjoxNzU1OTQzMzUzfQ.AfpXRiVH87XiP0yQlDvwWoZKIA_NZGjz0b2RY9v7-5g"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/auth/users",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Curah Hujan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/curah-hujan",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Curah Hujan By ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwNDVlMTcyLTI2ODctNGFiYi05NjhmLTNlNDAzNTNiY2Y2OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTg1Njk1MywiZXhwIjoxNzU1OTQzMzUzfQ.AfpXRiVH87XiP0yQlDvwWoZKIA_NZGjz0b2RY9v7-5g"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3001/curah-hujan/763c9819-0bc1-486d-a195-deb6db8a08e6",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Curah Hujan by Month",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MDUzMTg4LCJleHAiOjE3NTQxMzk1ODh9.Of7NS2Cq5-0kwgUQdgcUbNx2m4wr0D0LLNAacTlybr8"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/curah-hujan/1?bulan=2025-08",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"curah-hujan",
+						"1"
+					],
+					"query": [
+						{
+							"key": "bulan",
+							"value": "2025-08"
+						}
+					]
+				},
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": [
+				{
+					"name": "Get Curah Hujan by User",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/curah-hujan/1?bulan=2025-08",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"curah-hujan",
+								"1"
+							],
+							"query": [
+								{
+									"key": "bulan",
+									"value": "2025-08"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "304"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"130-IC2GotuoqbyGJFUU5q2a9WCgoR8\""
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 03 Aug 2025 13:25:52 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"tanggal\": \"2025-08-01T00:00:00.000Z\",\n            \"jam\": \"07:00:00\",\n            \"umur_hss\": 21,\n            \"umur_tanaman\": \"14 hari\",\n            \"curah_hujan\": 12.5,\n            \"sifat_hujan\": \"Sedang\",\n            \"user_id\": 1,\n            \"varietas\": \"Ciherang\",\n            \"sumber_air\": \"Irigasi\",\n            \"opt\": \"Wereng\",\n            \"createdAt\": \"2025-08-01T13:02:00.632Z\",\n            \"updatedAt\": \"2025-08-01T13:02:00.632Z\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Input Data Curah Hujan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI4ZTQ3ZTY2LTBiYzUtNDJlNC05OTdhLThhNmQ5ZDkxMTY3MCIsImVtYWlsIjoidXNlckBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTc1NjQyNjc2NSwiZXhwIjoxNzU2NTEzMTY1fQ.KqsOYsXURK9Pe-Nw2NMOJO8kACHvB2e9UbLXU7rwcSs"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tanggal\": \"2025-08-30\",\n    \"jam\": \"09:00\",\n    \"umur_hss\": \"12\",\n    \"umur_tanaman\": \"13\",\n    \"curah_hujan\": \"20\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3001/curah-hujan",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": [
+				{
+					"name": "Input Data Curah Hujan",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tanggal\": \"2025-08-30\",\n    \"jam\": \"09:00\",\n    \"umur_hss\": \"12\",\n    \"umur_tanaman\": \"13\",\n    \"curah_hujan\": \"20\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3001/curah-hujan"
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "419"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1a3-3p9BlZ/Swy8BM3HQKH+AK2mi8gk\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 29 Aug 2025 00:39:29 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Data curah hujan berhasil disimpan\",\n    \"data\": {\n        \"id\": \"6d874611-adc7-436c-96aa-194ebf97bd5b\",\n        \"tanggal\": \"2025-08-30T00:00:00.000Z\",\n        \"jam\": \"09:00:00\",\n        \"umur_hss\": 12,\n        \"umur_tanaman\": \"13\",\n        \"curah_hujan\": 20,\n        \"sifat_hujan\": \"Sedang\",\n        \"varietas\": null,\n        \"sumber_air\": null,\n        \"opt\": null,\n        \"user_id\": \"28e47e66-0bc5-42e4-997a-8a6d9d911670\",\n        \"updatedAt\": \"2025-08-29T00:39:29.214Z\",\n        \"createdAt\": \"2025-08-29T00:39:29.214Z\",\n        \"keterangan\": null\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Data Curah Hujan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwNDVlMTcyLTI2ODctNGFiYi05NjhmLTNlNDAzNTNiY2Y2OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTg1Njk1MywiZXhwIjoxNzU1OTQzMzUzfQ.AfpXRiVH87XiP0yQlDvwWoZKIA_NZGjz0b2RY9v7-5g"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"umur_hss\": \"16\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/curah-hujan/763c9819-0bc1-486d-a195-deb6db8a08e6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"curah-hujan",
+						"763c9819-0bc1-486d-a195-deb6db8a08e6"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "150738b6-2991-4bfa-b003-1cba3a69fda1",
+							"disabled": true
+						}
+					]
+				},
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": [
+				{
+					"name": "ex",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"umur_hss\": \"16\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/curah-hujan/763c9819-0bc1-486d-a195-deb6db8a08e6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"curah-hujan",
+								"763c9819-0bc1-486d-a195-deb6db8a08e6"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "150738b6-2991-4bfa-b003-1cba3a69fda1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "440"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1b8-lwZy8tNcfpH74IRVCt+hjTrABsY\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 22 Aug 2025 14:25:21 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Data berhasil diperbarui\",\n    \"data\": {\n        \"id\": \"763c9819-0bc1-486d-a195-deb6db8a08e6\",\n        \"user_id\": \"02a7feca-d1b9-41ac-95ec-35e5cc3cc285\",\n        \"tanggal\": \"2025-08-01T00:00:00.000Z\",\n        \"jam\": \"07:00:00\",\n        \"umur_hss\": \"16\",\n        \"umur_tanaman\": \"14 hari\",\n        \"curah_hujan\": 12.5,\n        \"sifat_hujan\": \"Sedang\",\n        \"varietas\": \"Ciherang\",\n        \"sumber_air\": \"Irigasi\",\n        \"opt\": \"Wereng\",\n        \"keterangan\": \"Tidak ada\",\n        \"createdAt\": \"2025-08-15T11:10:27.324Z\",\n        \"updatedAt\": \"2025-08-22T14:25:21.876Z\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete Data Curah Hujan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate that the response code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate that the response is json object",
+							"pm.test(\"Response is a json object\", function () {",
+							"    pm.expect(pm.response.json()).to.be.an('object');",
+							"});",
+							"",
+							"// Validate that the response has an arg object",
+							"pm.test(\"Response to have 'arg' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('args');",
+							"});",
+							"",
+							"// Validate that the response has headers object",
+							"pm.test(\"Response to have 'headers' object\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('headers');",
+							"});",
+							"",
+							"// Validate that the response has url property",
+							"pm.test(\"Response to have 'url' property\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('url');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMwNDVlMTcyLTI2ODctNGFiYi05NjhmLTNlNDAzNTNiY2Y2OCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTg1Njk1MywiZXhwIjoxNzU1OTQzMzUzfQ.AfpXRiVH87XiP0yQlDvwWoZKIA_NZGjz0b2RY9v7-5g"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:3001/curah-hujan/763c9819-0bc1-486d-a195-deb6db8a08e6",
+				"description": "The tests in this request validate that:\n\n- the response code is 200\n- the response is a JSON object\n- the response has an 'arg' object\n- the response has 'headers' object\n- the response has a 'URL' property"
+			},
+			"response": [
+				{
+					"name": "ex",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3001/curah-hujan/763c9819-0bc1-486d-a195-deb6db8a08e6"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"23-pEFAqkdXrlbnG3dk3WrnH3KmMlo\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 22 Aug 2025 15:02:47 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Data berhasil dihapus\"\n}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://postman-echo.com"
+		}
+	]
+}

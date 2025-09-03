@@ -16,6 +16,11 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import dayjs from "dayjs";
+import "dayjs/locale/id";
+
+dayjs.locale("id");
+
 import {
   Button,
   Table,
@@ -265,27 +270,38 @@ export default function ViewData() {
 
           {/* Filter */}
           <Grid container spacing={2}>
+            {/* Pilih Tahun */}
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth size="small">
                 <Select
                   value={tahun}
                   onChange={(e) => setTahun(e.target.value)}
                 >
-                  <MenuItem value="2023">2023</MenuItem>
-                  <MenuItem value="2024">2024</MenuItem>
-                  <MenuItem value="2025">2025</MenuItem>
+                  {Array.from(
+                    { length: dayjs().year() - 2022 },
+                    (_, i) => 2025 + i
+                  ).map((y) => (
+                    <MenuItem key={y} value={String(y)}>
+                      {y}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
+
+            {/* Pilih Bulan */}
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth size="small">
                 <Select
                   value={bulan}
                   onChange={(e) => setBulan(e.target.value)}
                 >
-                  {namaBulan.map((b, i) => (
-                    <MenuItem key={i} value={String(i + 1).padStart(2, "0")}>
-                      {b}
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <MenuItem
+                      key={i + 1}
+                      value={String(i + 1).padStart(2, "0")}
+                    >
+                      {dayjs(`${tahun}-${i + 1}-01`).format("MMMM")}
                     </MenuItem>
                   ))}
                 </Select>
