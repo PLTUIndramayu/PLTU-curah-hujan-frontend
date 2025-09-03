@@ -121,7 +121,7 @@ export function Header() {
                 <ListItem
                   button
                   component={Link}
-                  href="https://www.whatsapp.com"
+                  href="https://api.whatsapp.com/send/?phone=%2B6285602950075&text&type=phone_number&app_absent=0"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

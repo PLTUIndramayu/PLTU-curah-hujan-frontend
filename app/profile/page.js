@@ -176,7 +176,7 @@ export default function ProfilePage() {
     <Box sx={{ p: isMobile ? 1 : 3 }}>
       <div className="p-6 space-y-6">
         <Header />
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
+        <Paper elevation={3} sx={{ p: 2, borderRadius: 3 }}>
           <Box
             display="flex"
             flexDirection={isMobile ? "column" : "row"}
@@ -212,7 +212,7 @@ export default function ProfilePage() {
           <Divider sx={{ my: 2 }} />
 
           {/* Foto + Info User */}
-          <Box p={3}>
+          <Box p={2}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-1">
                 <Avatar
@@ -290,7 +290,7 @@ export default function ProfilePage() {
           </Box>
           {/* Informasi Pribadi */}
 
-          <Box p={3}>
+          <Box p={2}>
             <Typography variant="subtitle1" fontWeight="bold">
               Informasi Pribadi
             </Typography>
@@ -339,7 +339,7 @@ export default function ProfilePage() {
 
           {/* Informasi Pekerjaan */}
 
-          <Box p={3}>
+          <Box p={2}>
             <Typography variant="subtitle1" fontWeight="bold">
               Informasi Pekerjaan
             </Typography>
@@ -410,7 +410,7 @@ export default function ProfilePage() {
             </Typography>
             <Divider sx={{ my: 1 }} />
 
-            <Box mt={2}>
+            <Box mt={2} display='flex' justifyContent='start'>
               <Button
                 sx={{ textTransform: "none" }}
                 variant="outlined"
